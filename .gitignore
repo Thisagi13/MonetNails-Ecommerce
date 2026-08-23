@@ -1,0 +1,25 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environment and custom files
+.env
+/uploads/*
+!/uploads/.gitkeep
+
+# Database configurations or local settings
+/config/db_local.php
