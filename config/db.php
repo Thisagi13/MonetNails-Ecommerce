@@ -4,7 +4,7 @@
 $host = 'localhost';
 $db   = 'monet_nails_db';
 $user = 'root';
-$pass = '';
+$pass = '220308';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
