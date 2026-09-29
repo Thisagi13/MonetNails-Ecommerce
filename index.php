@@ -62,6 +62,7 @@ switch ($page) {
         break;
 
     case 'logout':
+    case 'signout':
         require_once __DIR__ . '/controllers/AuthController.php';
         $controller = new AuthController($pdo);
         $controller->logout();

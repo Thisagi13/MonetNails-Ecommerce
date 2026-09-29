@@ -18,9 +18,38 @@ function e($t) { return htmlspecialchars($t, ENT_QUOTES); }
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Shared & Product Stylesheets -->
-  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/gallery.css">
-  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/product.css">
+  <!-- Shared & Product Stylesheets with Cache Busting -->
+  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/gallery.css?v=2">
+  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/product.css?v=2">
+  <style>
+    .btn-buy, #btn-buy {
+      background: #1C1B1B !important;
+      background-color: #1C1B1B !important;
+      color: #ffffff !important;
+      border: 1px solid #1C1B1B !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+    .btn-buy:hover, #btn-buy:hover {
+      background: #A9275E !important;
+      background-color: #A9275E !important;
+      border-color: #A9275E !important;
+      color: #ffffff !important;
+      opacity: 0.95 !important;
+    }
+    .btn-cart, #btn-cart {
+      background: transparent !important;
+      color: #A9275E !important;
+      border: 1px solid #A9275E !important;
+      display: block !important;
+    }
+    .btn-cart:hover, #btn-cart:hover {
+      background: #FDF2F6 !important;
+      border-color: #A9275E !important;
+      color: #A9275E !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -72,9 +101,6 @@ function e($t) { return htmlspecialchars($t, ENT_QUOTES); }
       <p class="product-price" id="product-price"><?php echo e($data['priceText']); ?></p>
       <p class="product-description" id="product-desc"><?php echo e($data['product']['description'] ?? ''); ?></p>
 
-      <?php if ($data['added']): ?>
-        <p class="alert alert-success" id="alert-success">✓ Added to your cart!</p>
-      <?php endif; ?>
       <?php if ($data['error'] !== ""): ?>
         <p class="alert alert-error" id="alert-error"><?php echo e($data['error']); ?></p>
       <?php endif; ?>
@@ -84,7 +110,7 @@ function e($t) { return htmlspecialchars($t, ENT_QUOTES); }
             action="index.php?page=product&id=<?php echo (int)$data['product']['product_id']; ?>"
             onsubmit="return lockButtons();">
         <input type="hidden" name="page" value="product">
-        <button type="submit" name="action" value="buy_now" class="btn btn-buy" id="btn-buy">Buy Now</button>
+        <button type="submit" name="action" value="buy_now" class="btn btn-buy" id="btn-buy" style="background-color: #1C1B1B !important; color: #ffffff !important; border: 1px solid #1C1B1B !important; opacity: 1 !important; visibility: visible !important;">Buy Now</button>
         <button type="submit" name="action" value="add_to_cart" class="btn btn-cart" id="btn-cart">Add to Cart</button>
       </form>
 

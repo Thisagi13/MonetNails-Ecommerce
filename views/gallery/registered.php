@@ -21,7 +21,13 @@ function galleryImgUrl($url): string {
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Gallery Stylesheet -->
-  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/gallery.css">
+  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/gallery.css?v=2">
+  <style>
+    .top-nav { z-index: 200 !important; }
+    .popup-overlay { z-index: 90 !important; }
+    .profile-popup { z-index: 300 !important; }
+    .popup-item svg, .popup-item img { pointer-events: none !important; }
+  </style>
 </head>
 <body>
 
@@ -36,7 +42,6 @@ function galleryImgUrl($url): string {
       <a href="about.php" id="nav-about">About</a>
       <a href="services.php" id="nav-services">Services</a>
       <a href="index.php?page=gallery" class="active" id="nav-gallery">Gallery</a>
-      <a href="index.php?page=cart" id="nav-cart">Cart</a>
       <a href="contact.php" id="nav-contact">Contact</a>
     </div>
     <div class="nav-actions">
@@ -262,24 +267,36 @@ function galleryImgUrl($url): string {
     var btn     = document.getElementById('profileBtn');
     var popup   = document.getElementById('profilePopup');
     var overlay = document.getElementById('popupOverlay');
+    var logoutBtn = document.getElementById('popup-logout');
 
     function togglePopup(e) {
       e.stopPropagation();
       var isOpen = popup.classList.toggle('show');
-      overlay.classList.toggle('show', isOpen);
+      if (overlay) overlay.classList.toggle('show', isOpen);
     }
 
     function closePopup() {
       popup.classList.remove('show');
-      overlay.classList.remove('show');
+      if (overlay) overlay.classList.remove('show');
     }
 
     if (btn && popup) {
       btn.addEventListener('click', togglePopup);
       popup.addEventListener('click', function (e) { e.stopPropagation(); });
-      overlay.addEventListener('click', closePopup);
+      if (overlay) overlay.addEventListener('click', closePopup);
+      document.addEventListener('click', function (e) {
+        if (popup.classList.contains('show') && !popup.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+          closePopup();
+        }
+      });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closePopup();
+      });
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        window.location.href = this.href;
       });
     }
   })();

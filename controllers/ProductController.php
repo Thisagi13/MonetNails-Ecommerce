@@ -6,18 +6,21 @@
 
 require_once 'models/Product.php';
 require_once 'models/Cart.php';
+require_once 'models/Customer.php';
 
 class ProductController
 {
     private PDO $db;
     private Product $productModel;
     private Cart $cartModel;
+    private Customer $customerModel;
 
     public function __construct(PDO $db)
     {
         $this->db = $db;
         $this->productModel = new Product($db);
         $this->cartModel = new Cart($db);
+        $this->customerModel = new Customer($db);
     }
 
     public function index()
@@ -55,7 +58,7 @@ class ProductController
             if ($action !== 'add_to_cart' && $action !== 'buy_now') {
                 $error = "Unknown action. Please try again.";
             } else {
-                $userId = $_SESSION['user_id'] ?? null;
+                $userId = $_SESSION['customer_id'] ?? $_SESSION['user_id'] ?? null;
                 $sessionKey = ($userId === null) ? session_id() : "";
 
                 if (empty($sessionKey) && $userId === null) {
@@ -98,7 +101,30 @@ class ProductController
         ];
 
         // 3. Render View based on auth
-        if (isset($_SESSION['user_id'])) {
+        if (isset($_SESSION['customer_id']) || isset($_SESSION['user_id'])) {
+            $cid = (int)($_SESSION['customer_id'] ?? $_SESSION['user_id']);
+            $customer_name   = $_SESSION['customer_name'] ?? 'Client';
+            $customer_email  = '';
+            $customer_avatar = '';
+
+            $customer = $this->customerModel->findById($cid);
+            if ($customer) {
+                $customer_name   = trim($customer['f_name'] . ' ' . $customer['l_name']);
+                $customer_email  = $customer['email'] ?? '';
+                $customer_avatar = $customer['profile_image'] ?? '';
+            }
+
+            // Build avatar HTML
+            if (!empty($customer_avatar) && file_exists(__DIR__ . '/../' . $customer_avatar)) {
+                $avatar_html = '<img src="' . htmlspecialchars($customer_avatar) . '" alt="avatar">';
+            } else {
+                $initials = strtoupper(substr($customer_name, 0, 1));
+                if ($initials === '') {
+                    $initials = 'M';
+                }
+                $avatar_html = '<span class="avatar-initials">' . htmlspecialchars($initials) . '</span>';
+            }
+
             require 'views/product/registered.php';
         } else {
             require 'views/product/unregistered.php';
