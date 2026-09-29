@@ -141,6 +141,7 @@ class AuthController
                         $row = $this->customerModel->findById($new_id);
                         if ($row) {
                             $_SESSION['customer_id']   = $row['customer_id'];
+                            $_SESSION['user_id']       = $row['customer_id'];
                             $_SESSION['customer_name'] = $row['f_name'] . ' ' . $row['l_name'];
                             $_SESSION['role']          = 'customer';
                         }
@@ -160,6 +161,22 @@ class AuthController
      * ==================================================== */
     public function logout(): void
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $_SESSION = [];
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
         session_destroy();
         header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/');
         exit;
@@ -182,6 +199,7 @@ class AuthController
         }
 
         $_SESSION['customer_id']   = $user['customer_id'];
+        $_SESSION['user_id']       = $user['customer_id'];
         $_SESSION['customer_name'] = $user['f_name'] . ' ' . $user['l_name'];
         $_SESSION['role']          = 'customer';
 

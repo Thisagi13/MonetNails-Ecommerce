@@ -45,7 +45,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .top-nav {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
   background: rgba(252, 249, 248, 0.85);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -148,7 +148,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   inset: 0;
   background: rgba(0, 0, 0, 0.04);
   display: none;
-  z-index: 150;
+  z-index: 90;
 }
 .popup-overlay.show { display: block; }
 
@@ -161,7 +161,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border-radius: 12px;
   box-shadow: 0 12px 40px rgba(28, 27, 27, 0.15);
   padding: 20px;
-  z-index: 200;
+  z-index: 300;
   display: none;
   flex-direction: column;
   gap: 4px;
@@ -219,12 +219,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 14px;
   border-radius: 6px;
   transition: background 0.12s ease;
+  cursor: pointer;
+  text-decoration: none;
 }
 .popup-item:hover { background: var(--pink-bg); color: var(--pink); }
 .popup-item svg, .popup-item img {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  pointer-events: none;
 }
 
 .popup-footer {

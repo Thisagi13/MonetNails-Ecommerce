@@ -43,11 +43,6 @@
         <p class="heading-sub">Sign in to book your next appointment.</p>
       </div>
 
-      <!-- Role toggle: Customer / Admin -->
-      <div class="role-toggle" id="roleToggle">
-        <button type="button" data-role="customer" class="active" id="role-customer-btn">Customer</button>
-        <button type="button" data-role="admin" id="role-admin-btn">Admin</button>
-      </div>
 
       <!-- Errors -->
       <?php if (!empty($errors)): ?>
@@ -105,21 +100,6 @@
 
 </div>
 
-<script>
-  /* Role toggle — no library */
-  (function () {
-    var toggle = document.getElementById('roleToggle');
-    var input  = document.getElementById('roleInput');
-    if (!toggle) return;
 
-    toggle.addEventListener('click', function (e) {
-      var btn = e.target.closest('button');
-      if (!btn) return;
-      toggle.querySelectorAll('button').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      input.value = btn.getAttribute('data-role');
-    });
-  })();
-</script>
 </body>
 </html>

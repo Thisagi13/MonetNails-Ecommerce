@@ -5,21 +5,24 @@
  */
 
 require_once 'models/Cart.php';
+require_once 'models/Customer.php';
 
 class CartController
 {
     private PDO $db;
     private Cart $cartModel;
+    private Customer $customerModel;
 
     public function __construct(PDO $db)
     {
         $this->db = $db;
         $this->cartModel = new Cart($db);
+        $this->customerModel = new Customer($db);
     }
 
     public function index()
     {
-        $userId     = $_SESSION['user_id'] ?? null;
+        $userId     = $_SESSION['customer_id'] ?? $_SESSION['user_id'] ?? null;
         $sessionKey = ($userId === null) ? session_id() : '';
 
         // Handle Add to cart (GET or POST)
@@ -76,7 +79,30 @@ class CartController
             'itemCount'   => count($cartItems),
         ];
 
-        if (isset($_SESSION['user_id'])) {
+        if (isset($_SESSION['customer_id']) || isset($_SESSION['user_id'])) {
+            $cid = (int)($_SESSION['customer_id'] ?? $_SESSION['user_id']);
+            $customer_name   = $_SESSION['customer_name'] ?? 'Client';
+            $customer_email  = '';
+            $customer_avatar = '';
+
+            $customer = $this->customerModel->findById($cid);
+            if ($customer) {
+                $customer_name   = trim($customer['f_name'] . ' ' . $customer['l_name']);
+                $customer_email  = $customer['email'] ?? '';
+                $customer_avatar = $customer['profile_image'] ?? '';
+            }
+
+            // Build avatar HTML
+            if (!empty($customer_avatar) && file_exists(__DIR__ . '/../' . $customer_avatar)) {
+                $avatar_html = '<img src="' . htmlspecialchars($customer_avatar) . '" alt="avatar">';
+            } else {
+                $initials = strtoupper(substr($customer_name, 0, 1));
+                if ($initials === '') {
+                    $initials = 'M';
+                }
+                $avatar_html = '<span class="avatar-initials">' . htmlspecialchars($initials) . '</span>';
+            }
+
             require 'views/cart/registered.php';
         } else {
             require 'views/cart/unregistered.php';
