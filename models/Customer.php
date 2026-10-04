@@ -24,7 +24,7 @@ class Customer
     public function findByEmail(string $email): array|false
     {
         $stmt = $this->db->prepare(
-            'SELECT customer_id, f_name, l_name, email, password, profile_image
+            'SELECT customer_id, f_name, l_name, email, password, profile_image, is_verified
              FROM Customer WHERE email = ? LIMIT 1'
         );
         $stmt->execute([$email]);

@@ -44,6 +44,14 @@
       </div>
 
 
+      <!-- Verified success banner -->
+      <?php if (isset($_GET['verified']) && $_GET['verified'] == '1'): ?>
+        <div class="errors" id="signin-verified-banner"
+             style="background:#EAF7EC;border-color:#7FC88F;color:#256B36;list-style:none;">
+          &#10003;&nbsp; Your email has been verified! Please sign in to continue.
+        </div>
+      <?php endif; ?>
+
       <!-- Errors -->
       <?php if (!empty($errors)): ?>
         <ul class="errors" id="signin-errors">
