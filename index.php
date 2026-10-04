@@ -61,6 +61,12 @@ switch ($page) {
         $controller->signup();
         break;
 
+    case 'verify':
+        require_once __DIR__ . '/controllers/VerifyController.php';
+        $controller = new VerifyController($pdo);
+        $controller->index();
+        break;
+
     case 'logout':
     case 'signout':
         require_once __DIR__ . '/controllers/AuthController.php';

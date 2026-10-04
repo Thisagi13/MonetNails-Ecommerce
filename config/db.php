@@ -16,6 +16,9 @@ $options = [
 
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
+     // Sync MySQL session timezone to PHP's timezone so expires_at comparisons work correctly
+     $offset = (new DateTime())->format('P'); // e.g. "+02:00"
+     $pdo->exec("SET time_zone = '$offset'");
 } catch (\PDOException $e) {
      throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }

@@ -137,15 +137,10 @@ class AuthController
                     if ($new_id === false) {
                         $errors[] = 'Could not create account. Please try again.';
                     } else {
-                        // Auto-login and redirect to registered homepage
-                        $row = $this->customerModel->findById($new_id);
-                        if ($row) {
-                            $_SESSION['customer_id']   = $row['customer_id'];
-                            $_SESSION['user_id']       = $row['customer_id'];
-                            $_SESSION['customer_name'] = $row['f_name'] . ' ' . $row['l_name'];
-                            $_SESSION['role']          = 'customer';
-                        }
-                        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/');
+                        // Store verification context in session, then redirect to verify page
+                        $_SESSION['pending_customer_id'] = $new_id;
+                        $_SESSION['verify_email']        = $email;
+                        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=verify');
                         exit;
                     }
                 }
@@ -196,6 +191,14 @@ class AuthController
         if (!password_verify($password, $user['password'])) {
             $errors[] = 'Incorrect password. Please try again.';
             return;
+        }
+
+        // Block unverified accounts — redirect back to verify page
+        if (empty($user['is_verified'])) {
+            $_SESSION['pending_customer_id'] = $user['customer_id'];
+            $_SESSION['verify_email']        = $user['email'];
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=verify');
+            exit;
         }
 
         $_SESSION['customer_id']   = $user['customer_id'];
