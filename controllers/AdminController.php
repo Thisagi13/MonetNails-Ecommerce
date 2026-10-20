@@ -5,6 +5,9 @@
  */
 
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../models/Product.php';
+require_once __DIR__ . '/../models/Appointment.php';
+require_once __DIR__ . '/../models/Service.php';
 
 class AdminController
 {
@@ -220,27 +223,373 @@ class AdminController
         require __DIR__ . '/../views/admin/dashboard.php';
     }
 
-    public function manageServices() {
-        // CRUD for nail services
+    // =========================================================================
+    // PRODUCT CATALOG & INVENTORY  (admin role only)
+    // =========================================================================
+
+    public function manageProducts(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        // Auth guard
+        if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&redirect=admin_products');
+            exit;
+        }
+
+        $product = new Product($this->pdo);
+        $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
+        $adminName     = $_SESSION['admin_name'] ?? 'Admin';
+        $adminParts    = preg_split('/\s+/', trim($adminName));
+        $adminInitials = strtoupper(substr($adminParts[0] ?? 'A', 0, 1) . substr($adminParts[1] ?? '', 0, 1));
+        if (empty($adminInitials)) $adminInitials = 'MA';
+
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                  strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+        // ---- POST actions (AJAX or regular form) ----------------------------
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $action = $_POST['action'] ?? '';
+
+            // AJAX: Quick stock adjustment (+1 button)
+            if ($action === 'adjust_stock' && $isAjax) {
+                $pid   = (int)($_POST['product_id'] ?? 0);
+                $delta = (int)($_POST['delta'] ?? 1);
+                $product->adjustStock($pid, $delta);
+                header('Content-Type: application/json');
+                $row = $product->findById($pid);
+                echo json_encode(['ok' => true, 'stock' => $row['stock_quantity'] ?? 0]);
+                exit;
+            }
+
+            // AJAX: Set stock directly
+            if ($action === 'set_stock' && $isAjax) {
+                $pid = (int)($_POST['product_id'] ?? 0);
+                $qty = (int)($_POST['quantity']   ?? 0);
+                $product->setStock($pid, $qty);
+                header('Content-Type: application/json');
+                echo json_encode(['ok' => true, 'stock' => max(0, $qty)]);
+                exit;
+            }
+
+            // Add new product
+            if ($action === 'add_product') {
+                $imageUrl = null;
+                if (!empty($_FILES['image']['name'])) {
+                    $uploadDir = __DIR__ . '/../uploads/';
+                    $ext       = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                    $allowed   = ['jpg','jpeg','png','gif','webp'];
+                    if (in_array($ext, $allowed, true) && $_FILES['image']['size'] < 5 * 1024 * 1024) {
+                        $fname    = 'prod_' . time() . '_' . random_int(1000, 9999) . '.' . $ext;
+                        move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $fname);
+                        $imageUrl = 'uploads/' . $fname;
+                    }
+                }
+                $data = [
+                    'category_id'    => (int)($_POST['category_id']    ?? 1),
+                    'sku'            => trim($_POST['sku']              ?? ''),
+                    'product_name'   => trim($_POST['product_name']     ?? ''),
+                    'description'    => trim($_POST['description']      ?? ''),
+                    'price'          => (float)($_POST['price']         ?? 0),
+                    'stock_quantity' => (int)($_POST['stock_quantity']  ?? 0),
+                    'image_url'      => $imageUrl,
+                    'shape'          => trim($_POST['shape']            ?? ''),
+                    'finish'         => trim($_POST['finish']           ?? ''),
+                    'material_info'  => trim($_POST['material_info']    ?? ''),
+                    'includes_info'  => trim($_POST['includes_info']    ?? ''),
+                    'shipping_info'  => trim($_POST['shipping_info']    ?? ''),
+                    'is_active'      => isset($_POST['is_active']) ? 1 : 0,
+                ];
+                $product->create($data);
+                header('Location: ' . $base_url . '/index.php?page=admin_products&success=created');
+                exit;
+            }
+
+            // Edit existing product
+            if ($action === 'edit_product') {
+                $pid      = (int)($_POST['product_id'] ?? 0);
+                $existing = $product->findById($pid);
+                $imageUrl = $existing['image_url'] ?? null;
+                if (!empty($_FILES['image']['name'])) {
+                    $uploadDir = __DIR__ . '/../uploads/';
+                    $ext       = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+                    $allowed   = ['jpg','jpeg','png','gif','webp'];
+                    if (in_array($ext, $allowed, true) && $_FILES['image']['size'] < 5 * 1024 * 1024) {
+                        $fname    = 'prod_' . time() . '_' . random_int(1000, 9999) . '.' . $ext;
+                        move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $fname);
+                        $imageUrl = 'uploads/' . $fname;
+                    }
+                }
+                $data = [
+                    'category_id'    => (int)($_POST['category_id']    ?? 1),
+                    'sku'            => trim($_POST['sku']              ?? ''),
+                    'product_name'   => trim($_POST['product_name']     ?? ''),
+                    'description'    => trim($_POST['description']      ?? ''),
+                    'price'          => (float)($_POST['price']         ?? 0),
+                    'stock_quantity' => (int)($_POST['stock_quantity']  ?? 0),
+                    'image_url'      => $imageUrl,
+                    'shape'          => trim($_POST['shape']            ?? ''),
+                    'finish'         => trim($_POST['finish']           ?? ''),
+                    'material_info'  => trim($_POST['material_info']    ?? ''),
+                    'includes_info'  => trim($_POST['includes_info']    ?? ''),
+                    'shipping_info'  => trim($_POST['shipping_info']    ?? ''),
+                    'is_active'      => isset($_POST['is_active']) ? 1 : 0,
+                ];
+                $product->update($pid, $data);
+                header('Location: ' . $base_url . '/index.php?page=admin_products&success=updated');
+                exit;
+            }
+
+            // Delete product
+            if ($action === 'delete_product') {
+                $pid = (int)($_POST['product_id'] ?? 0);
+                try {
+                    $product->hardDelete($pid);
+                } catch (\Exception $e) {
+                    // FK violation — fall back to soft-delete
+                    $product->softDelete($pid);
+                }
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['ok' => true]);
+                    exit;
+                }
+                header('Location: ' . $base_url . '/index.php?page=admin_products&success=deleted');
+                exit;
+            }
+        }
+
+        // ---- GET: fetch list data -------------------------------------------
+        $search      = trim($_GET['search']       ?? '');
+        $categoryId  = (int)($_GET['category_id'] ?? 0);
+        $stockFilter = $_GET['stock']             ?? 'all';
+        $statusFilter= $_GET['status']            ?? 'all';
+        $perPage     = max(1, (int)($_GET['per_page'] ?? 10));
+        $currentPage = max(1, (int)($_GET['pg']       ?? 1));
+
+        // Stats cards
+        $total_active    = $product->countActive();
+        $low_stock       = $product->countLowStock();
+        $out_of_stock    = $product->countOutOfStock();
+        $inventory_value = $product->inventoryValue();
+
+        // Product list
+        $result   = $product->adminList($search, $categoryId, $stockFilter, $statusFilter, $currentPage, $perPage);
+        $products = $result['rows'];
+        $totalRows= $result['total'];
+        $totalPages = max(1, (int)ceil($totalRows / $perPage));
+
+        // Categories for filter dropdown
+        $categories = [];
+        try {
+            $categories = $this->pdo->query("SELECT category_id, category_name FROM categories ORDER BY category_name ASC")->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) { $categories = []; }
+
+        // Flash message
+        $flashMsg = '';
+        switch ($_GET['success'] ?? '') {
+            case 'created': $flashMsg = 'Product added successfully.';   break;
+            case 'updated': $flashMsg = 'Product updated successfully.'; break;
+            case 'deleted': $flashMsg = 'Product deleted successfully.'; break;
+        }
+
+        require __DIR__ . '/../views/admin/products.php';
+    }
+
+    public function manageServices(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin');
+            exit;
+        }
         header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/services.php');
         exit;
     }
 
-    public function manageAppointments() {
-        // Manage booking schedules
-        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/appointments.php');
-        exit;
+    public function manageAppointments(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        // Auth guard
+        if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&redirect=admin_appointments');
+            exit;
+        }
+
+        $appointmentModel = new Appointment($this->pdo);
+        $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
+        $adminName = $_SESSION['admin_name'] ?? 'Sarah Chen';
+        $adminParts = preg_split('/\s+/', trim($adminName));
+        $adminInitials = strtoupper(substr($adminParts[0] ?? 'S', 0, 1) . substr($adminParts[1] ?? '', 0, 1));
+        if (empty($adminInitials)) $adminInitials = 'SC';
+
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                  strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+        // POST actions
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $action = $_POST['action'] ?? '';
+
+            // AJAX: Quick Status change (confirmed, completed, cancelled)
+            if ($action === 'update_status') {
+                $aptId = (int)($_POST['appointment_id'] ?? 0);
+                $status = trim($_POST['status'] ?? 'confirmed');
+                $appointmentModel->updateStatus($aptId, $status);
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['ok' => true, 'status' => $status]);
+                    exit;
+                }
+                header('Location: ' . $base_url . '/index.php?page=admin_appointments&success=status_updated');
+                exit;
+            }
+
+            // AJAX or POST: Reschedule appointment date & slot
+            if ($action === 'reschedule') {
+                $aptId = (int)($_POST['appointment_id'] ?? 0);
+                $date = trim($_POST['appointment_date'] ?? '');
+                $time = trim($_POST['appointment_time'] ?? '');
+                $appointmentModel->reschedule($aptId, $date, $time);
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['ok' => true]);
+                    exit;
+                }
+                header('Location: ' . $base_url . '/index.php?page=admin_appointments&success=rescheduled');
+                exit;
+            }
+
+            // Create walk-in / new appointment
+            if ($action === 'create_appointment') {
+                $data = [
+                    'service_id'          => (int)($_POST['service_id'] ?? 1),
+                    'customer_id'         => !empty($_POST['customer_id']) ? (int)$_POST['customer_id'] : null,
+                    'managed_by_admin_id' => (int)($_SESSION['admin_id'] ?? 1),
+                    'appointment_date'    => trim($_POST['appointment_date'] ?? date('Y-m-d')),
+                    'appointment_time'    => trim($_POST['appointment_time'] ?? '10:00:00'),
+                    'first_name'          => trim($_POST['first_name'] ?? ''),
+                    'last_name'           => trim($_POST['last_name'] ?? ''),
+                    'email'               => trim($_POST['email'] ?? ''),
+                    'client_tier'         => trim($_POST['client_tier'] ?? 'Patron'),
+                    'phone'               => trim($_POST['phone'] ?? ''),
+                    'special_requests'    => trim($_POST['special_requests'] ?? ''),
+                    'total_price'         => (float)($_POST['total_price'] ?? 0),
+                    'payment_status'      => trim($_POST['payment_status'] ?? 'pending'),
+                    'status'              => trim($_POST['status'] ?? 'confirmed'),
+                ];
+                $appointmentModel->createAdminAppointment($data);
+                header('Location: ' . $base_url . '/index.php?page=admin_appointments&success=created');
+                exit;
+            }
+
+            // Edit appointment details
+            if ($action === 'edit_appointment') {
+                $aptId = (int)($_POST['appointment_id'] ?? 0);
+                $data = [
+                    'service_id'          => (int)($_POST['service_id'] ?? 1),
+                    'appointment_date'    => trim($_POST['appointment_date'] ?? date('Y-m-d')),
+                    'appointment_time'    => trim($_POST['appointment_time'] ?? '10:00:00'),
+                    'first_name'          => trim($_POST['first_name'] ?? ''),
+                    'last_name'           => trim($_POST['last_name'] ?? ''),
+                    'email'               => trim($_POST['email'] ?? ''),
+                    'client_tier'         => trim($_POST['client_tier'] ?? 'Patron'),
+                    'phone'               => trim($_POST['phone'] ?? ''),
+                    'special_requests'    => trim($_POST['special_requests'] ?? ''),
+                    'total_price'         => (float)($_POST['total_price'] ?? 0),
+                    'status'              => trim($_POST['status'] ?? 'confirmed'),
+                    'managed_by_admin_id' => !empty($_POST['managed_by_admin_id']) ? (int)$_POST['managed_by_admin_id'] : null,
+                ];
+                $appointmentModel->updateAppointment($aptId, $data);
+                header('Location: ' . $base_url . '/index.php?page=admin_appointments&success=updated');
+                exit;
+            }
+
+            // Delete appointment
+            if ($action === 'delete_appointment') {
+                $aptId = (int)($_POST['appointment_id'] ?? 0);
+                $appointmentModel->deleteAppointment($aptId);
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    echo json_encode(['ok' => true]);
+                    exit;
+                }
+                header('Location: ' . $base_url . '/index.php?page=admin_appointments&success=deleted');
+                exit;
+            }
+        }
+
+        // GET: Fetch list & stats
+        $search      = trim($_GET['search']    ?? '');
+        $category    = trim($_GET['category']  ?? '');
+        $status      = trim($_GET['status']    ?? 'all');
+        $timeSlot    = trim($_GET['time_slot'] ?? 'all');
+        $perPage     = max(1, (int)($_GET['per_page'] ?? 10));
+        $currentPage = max(1, (int)($_GET['pg']       ?? 1));
+
+        // 4 KPI Stats
+        $stats = $appointmentModel->getAdminStats();
+
+        // Paginated list
+        $result      = $appointmentModel->getAdminList($search, $category, $status, $timeSlot, $currentPage, $perPage);
+        $appts       = $result['rows'];
+        $totalRows   = $result['total'];
+        $totalPages  = max(1, (int)ceil($totalRows / $perPage));
+
+        // Active services for modal select
+        $services = [];
+        try {
+            $services = $this->pdo->query("SELECT service_id, name, category, duration, price FROM service WHERE is_active = 1 ORDER BY sort_order ASC, name ASC")->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) { $services = []; }
+
+        // Categories for filter dropdown
+        $categories = [];
+        try {
+            $categories = $this->pdo->query("SELECT DISTINCT category FROM service WHERE category IS NOT NULL AND category != '' ORDER BY category ASC")->fetchAll(PDO::FETCH_COLUMN);
+        } catch (\Exception $e) { $categories = []; }
+
+        // Flash message
+        $flashMsg = '';
+        switch ($_GET['success'] ?? '') {
+            case 'created': $flashMsg = 'Appointment booked successfully.'; break;
+            case 'updated': $flashMsg = 'Appointment details updated.'; break;
+            case 'status_updated': $flashMsg = 'Appointment status updated.'; break;
+            case 'rescheduled': $flashMsg = 'Appointment schedule adjusted.'; break;
+            case 'deleted': $flashMsg = 'Appointment removed from salon schedule.'; break;
+        }
+
+        require __DIR__ . '/../views/admin/appointments.php';
     }
 
-    public function manageOrders() {
-        // View and update customer orders
+    public function manageOrders(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin');
+            exit;
+        }
         header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/orders.php');
         exit;
     }
 
-    public function manageUsers() {
-        // CRUD for users and staff members
-        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/users.php');
+    public function manageUsers(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin');
+            exit;
+        }
+        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=admin');
         exit;
+    }
+
+    public function salesReports(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&redirect=admin_reports');
+            exit;
+        }
+        $this->dashboard();
     }
 }

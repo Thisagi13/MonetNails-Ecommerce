@@ -65,7 +65,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                 </svg>
                 <span>Dashboard</span>
             </a>
-            <a href="<?php echo $base_url; ?>/admin/orders.php" class="nav-item">
+            <a href="<?php echo $base_url; ?>/index.php?page=admin_orders" class="nav-item">
                 <!-- Orders icon: shopping bag -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2 L3 6 L3 20 a2 2 0 0 0 2 2 h14 a2 2 0 0 0 2 -2 V6 L18 2 Z"/>
@@ -74,7 +74,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                 </svg>
                 <span>Orders &amp; Queue</span>
             </a>
-            <a href="<?php echo $base_url; ?>/admin/services.php" class="nav-item">
+            <a href="<?php echo $base_url; ?>/index.php?page=admin_products" class="nav-item">
                 <!-- Products icon: package -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 8 L12 3 L3 8 V16 L12 21 L21 16 Z"/>
@@ -84,7 +84,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                 </svg>
                 <span>Products &amp; Stock</span>
             </a>
-            <a href="<?php echo $base_url; ?>/admin/appointments.php" class="nav-item">
+            <a href="<?php echo $base_url; ?>/index.php?page=admin_appointments" class="nav-item">
                 <!-- Appointments icon: calendar -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -94,24 +94,14 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                 </svg>
                 <span>Appointments</span>
             </a>
-            <a href="<?php echo $base_url; ?>/admin/users.php" class="nav-item">
-                <!-- Users icon -->
+            <a href="<?php echo $base_url; ?>/index.php?page=admin_reports" class="nav-item">
+                <!-- Sales & Reports icon -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
                 </svg>
-                <span>Customers &amp; Staff</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/" class="nav-item" target="_blank" title="View Customer Storefront">
-                <!-- External store icon -->
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-                <span>Storefront View</span>
+                <span>Sales &amp; Reports</span>
             </a>
         </nav>
 
@@ -368,7 +358,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                         <?php endforeach; ?>
                     <?php endif; ?>
 
-                    <a href="<?php echo $base_url; ?>/admin/appointments.php" class="view-link">View full schedule →</a>
+                    <a href="<?php echo $base_url; ?>/index.php?page=admin_appointments" class="view-link">View full schedule →</a>
                 </div>
             </div>
 
@@ -379,7 +369,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                 <div class="card">
                     <div class="card-head">
                         <span class="card-title">Recent orders</span>
-                        <a href="<?php echo $base_url; ?>/admin/orders.php" class="card-link">View all orders</a>
+                        <a href="<?php echo $base_url; ?>/index.php?page=admin_orders" class="card-link">View all orders</a>
                     </div>
 
                     <table class="orders-table">
@@ -446,19 +436,19 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                         </div>
                     <?php endif; ?>
 
-                    <a href="<?php echo $base_url; ?>/admin/services.php" class="view-link">Review inventory →</a>
+                    <a href="<?php echo $base_url; ?>/index.php?page=admin_products" class="view-link">Review inventory →</a>
 
                     <div class="quick-actions">
                         <div class="qa-label">Quick actions</div>
                         <div class="qa-row">
-                            <a href="<?php echo $base_url; ?>/admin/orders.php" class="qa-btn qa-btn-primary">
+                            <a href="<?php echo $base_url; ?>/index.php?page=admin_orders" class="qa-btn qa-btn-primary">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="12" y1="5" x2="12" y2="19"/>
                                     <line x1="5" y1="12" x2="19" y2="12"/>
                                 </svg>
                                 New order
                             </a>
-                            <a href="<?php echo $base_url; ?>/admin/appointments.php" class="qa-btn qa-btn-outline">
+                            <a href="<?php echo $base_url; ?>/index.php?page=admin_appointments" class="qa-btn qa-btn-outline">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="3" y="4" width="18" height="18" rx="2"/>
                                     <line x1="16" y1="2" x2="16" y2="6"/>
