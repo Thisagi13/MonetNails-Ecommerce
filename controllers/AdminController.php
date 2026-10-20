@@ -8,6 +8,7 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../models/Product.php';
 require_once __DIR__ . '/../models/Appointment.php';
 require_once __DIR__ . '/../models/Service.php';
+require_once __DIR__ . '/../models/Order.php';
 
 class AdminController
 {
@@ -568,7 +569,7 @@ class AdminController
             header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin');
             exit;
         }
-        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/orders.php');
+        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=admin');
         exit;
     }
 
@@ -585,11 +586,128 @@ class AdminController
 
     public function salesReports(): void
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Verify admin access
         if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+            $_SESSION['redirect_after_login'] = 'admin_reports';
             header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&redirect=admin_reports');
             exit;
         }
-        $this->dashboard();
+
+        $adminId   = (int)($_SESSION['admin_id'] ?? 0);
+        $adminName = $_SESSION['admin_name'] ?? 'Damika Rajithuru';
+        $adminParts = preg_split('/\s+/', trim($adminName));
+        $adminFirstName = $adminParts[0] ?? 'Damika';
+        $adminInitials  = strtoupper(substr($adminFirstName, 0, 1) . substr($adminParts[1] ?? '', 0, 1));
+        if (empty($adminInitials)) {
+            $adminInitials = 'MA';
+        }
+
+        // Period filter
+        $period = $_GET['period'] ?? '';
+        $today = date('Y-m-d');
+
+        if ($period === 'today') {
+            $start = $today;
+            $end   = $today;
+        } elseif ($period === 'this_week') {
+            $dow = (int)date('N');
+            $start = date('Y-m-d', strtotime('-' . ($dow - 1) . ' days'));
+            $end   = date('Y-m-d', strtotime('+' . (7 - $dow) . ' days'));
+        } elseif ($period === 'last_month') {
+            $start = date('Y-m-01', strtotime('-1 month'));
+            $end   = date('Y-m-t',  strtotime('-1 month'));
+        } elseif ($period === 'this_year') {
+            $start = date('Y-01-01');
+            $end   = date('Y-12-31');
+        } elseif ($period === 'all_time') {
+            $start = '2024-01-01';
+            $end   = $today;
+        } elseif (!empty($_GET['start']) && !empty($_GET['end'])) {
+            $start = substr(trim($_GET['start']), 0, 10);
+            $end   = substr(trim($_GET['end']), 0, 10);
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $end)) {
+                $start = date('Y-m-01');
+                $end   = date('Y-m-t');
+            }
+            if ($start > $end) {
+                $tmp = $start;
+                $start = $end;
+                $end = $tmp;
+            }
+            $period = 'custom';
+        } else {
+            $start  = date('Y-m-01');
+            $end    = date('Y-m-t');
+            $period = 'this_month';
+        }
+
+        $orderModel = new Order($this->pdo);
+        $reportData = $orderModel->getSalesReportData($start, $end);
+
+        // CSV Export Handler
+        if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="monet_atelier_sales_report_' . $start . '_to_' . $end . '.csv"');
+            $out = fopen('php://output', 'w');
+
+            fputcsv($out, ['MONET ATELIER — SALES & PERFORMANCE REPORT']);
+            fputcsv($out, ['Reporting Period', $start . ' to ' . $end]);
+            fputcsv($out, ['Generated At', date('Y-m-d H:i:s')]);
+            fputcsv($out, []);
+
+            // 1. Key Metrics
+            fputcsv($out, ['KEY METRICS', 'CURRENT PERIOD', 'PREVIOUS PERIOD', 'VARIANCE %']);
+            fputcsv($out, ['Total Revenue ($)', number_format($reportData['total_rev'], 2, '.', ''), number_format($reportData['prev_total_rev'], 2, '.', ''), $reportData['rev_pct'] . '%']);
+            fputcsv($out, ['Orders Placed', $reportData['orders_count'], $reportData['prev_orders_count'], $reportData['ord_pct'] . '%']);
+            fputcsv($out, ['Average Order Value ($)', number_format($reportData['aov'], 2, '.', ''), number_format($reportData['prev_aov'], 2, '.', ''), $reportData['aov_pct'] . '%']);
+            fputcsv($out, ['Press-on Sets Sold', $reportData['sets_sold'], $reportData['prev_sets_sold'], $reportData['sets_pct'] . '%']);
+            fputcsv($out, ['Atelier Appointments', $reportData['appts_count'], '-', '-']);
+            fputcsv($out, []);
+
+            // 2. Revenue Breakdown
+            fputcsv($out, ['REVENUE BREAKDOWN', 'AMOUNT ($)', 'SHARE %']);
+            fputcsv($out, ['Press-on Sets & E-Commerce', number_format($reportData['press_rev'], 2, '.', ''), $reportData['press_pct'] . '%']);
+            fputcsv($out, ['Nail Bar Studio Services', number_format($reportData['services_rev'], 2, '.', ''), $reportData['services_pct'] . '%']);
+            fputcsv($out, ['Care & Accessories', number_format($reportData['accessories_rev'], 2, '.', ''), $reportData['access_pct'] . '%']);
+            fputcsv($out, []);
+
+            // 3. Best Selling Products
+            fputcsv($out, ['BEST SELLING PRODUCTS']);
+            fputcsv($out, ['Product ID', 'Product Name', 'Category', 'Units Sold', 'Revenue ($)', 'Product Share %']);
+            foreach ($reportData['top_products'] as $tp) {
+                $sh = $reportData['top_total'] > 0 ? round(($tp['revenue'] / $reportData['top_total']) * 100, 1) : 0;
+                fputcsv($out, [
+                    $tp['product_id'],
+                    $tp['product_name'],
+                    $tp['category_name'] ?? 'Press-on nails',
+                    $tp['units_sold'],
+                    number_format($tp['revenue'], 2, '.', ''),
+                    $sh . '%'
+                ]);
+            }
+            fputcsv($out, []);
+
+            // 4. Daily Trend
+            fputcsv($out, ['DAILY REVENUE BREAKDOWN']);
+            fputcsv($out, ['Date', 'Orders Revenue ($)', 'Appointments Revenue ($)', 'Total Daily Revenue ($)']);
+            foreach ($reportData['daily'] as $d) {
+                fputcsv($out, [
+                    $d['date'],
+                    number_format($d['orders_rev'], 2, '.', ''),
+                    number_format($d['appts_rev'], 2, '.', ''),
+                    number_format($d['rev'], 2, '.', '')
+                ]);
+            }
+
+            fclose($out);
+            exit;
+        }
+
+        $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
+        require __DIR__ . '/../views/admin/reports.php';
     }
 }
