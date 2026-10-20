@@ -108,6 +108,44 @@ switch ($page) {
         $controller->dashboard();
         break;
 
+    case 'admin_products':
+    case 'admin_product':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->manageProducts();
+        break;
+
+    case 'admin_orders':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->manageOrders();
+        break;
+
+    case 'admin_appointments':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->manageAppointments();
+        break;
+
+    case 'admin_services':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->manageServices();
+        break;
+
+    case 'admin_users':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->manageUsers();
+        break;
+
+    case 'admin_reports':
+    case 'admin_sales':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->salesReports();
+        break;
+
     case 'signin':
     case 'login':
         if (isset($_SESSION['admin_id']) || (isset($_SESSION['role']) && $_SESSION['role'] === 'admin')) {
