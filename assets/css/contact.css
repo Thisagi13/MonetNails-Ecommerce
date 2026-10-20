@@ -1,0 +1,477 @@
+/* ============================================================
+   contact.css — Contact Us Page Stylesheet
+   Monet Nails E-Commerce Application
+   ============================================================ */
+
+/* ── Design Tokens ── */
+:root {
+    --dark:    #1C1B1B;
+    --brown:   #574147;
+    --muted:   #8A7177;
+    --pink:    #A9275E;
+    --pink-lt: #D4608A;
+    --border:  #DDC2C6;
+    --bg:      #FAF8F9;
+    --white:   #ffffff;
+}
+
+/* ── Reset / Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Manrope', sans-serif;
+    color: var(--brown);
+    background: var(--bg);
+    min-height: 100vh;
+}
+
+/* ── Page wrapper ── */
+.contact-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ── Main content area ── */
+.contact-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HERO SECTION
+───────────────────────────────────────────────────────────── */
+.contact-hero {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 48px;
+}
+
+.contact-hero-watermark {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1200px;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.contact-hero h1 {
+    position: relative;
+    z-index: 1;
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 400;
+    font-size: clamp(44px, 6vw, 72px);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: var(--dark);
+}
+
+.contact-hero-sub {
+    position: relative;
+    z-index: 1;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--brown);
+    max-width: 620px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BENTO GRID (form left + info right)
+───────────────────────────────────────────────────────────── */
+.contact-bento {
+    display: flex;
+    align-items: stretch;
+    gap: 28px;
+}
+
+/* ── Common card shell ── */
+.contact-card {
+    background: var(--white);
+    border: 1px solid rgba(221, 191, 198, 0.35);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* ─── Left: Form card ─── */
+.form-card {
+    flex: 1.4;
+    padding: 48px 48px 52px;
+}
+
+.form-card-title {
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.3;
+    color: var(--dark);
+    margin-bottom: 32px;
+}
+
+/* Alert banners */
+.contact-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    animation: fadeSlideIn 0.35s ease both;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.contact-alert.success {
+    background: #EAF7EC;
+    border: 1px solid #7FC88F;
+    color: #1f6b36;
+}
+
+.contact-alert.error {
+    background: #FBECEE;
+    border: 1px solid #E08A96;
+    color: #7a1a26;
+}
+
+.contact-alert svg { flex-shrink: 0; margin-top: 1px; }
+
+/* Form layout */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.form-row-2 {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row-2 .form-field { flex: 1; }
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-field label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--brown);
+}
+
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    color: var(--dark);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+    color: var(--muted);
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px rgba(169, 39, 94, 0.08);
+}
+
+.form-field textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+/* Locked fields for logged-in users */
+.form-field input[readonly] {
+    background: #f9f5f6;
+    color: var(--brown);
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.field-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+/* Send button */
+.contact-send-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, var(--pink), var(--pink-lt));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contact-send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(169, 39, 94, 0.32);
+}
+
+.contact-send-btn:active { transform: translateY(0); }
+
+.contact-send-btn svg { flex-shrink: 0; }
+
+/* ─── Right: Info column ─── */
+.info-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Visit Us card (blush tint) */
+.visit-card {
+    background: rgba(242, 221, 226, 0.18);
+    border: 1px solid rgba(221, 191, 198, 0.28);
+    border-radius: 14px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info-card-heading svg { color: var(--pink); flex-shrink: 0; }
+
+.info-card-title {
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--dark);
+}
+
+.visit-address {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--brown);
+}
+
+/* Map embed */
+.map-frame {
+    width: 100%;
+    height: 180px;
+    border-radius: 8px;
+    border: none;
+    display: block;
+    filter: grayscale(20%);
+}
+
+/* Connect + Hours card */
+.connect-card {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid rgba(221, 191, 198, 0.35);
+    border-radius: 14px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.connect-block,
+.hours-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.connect-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.connect-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--brown);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.connect-line:hover { color: var(--pink); }
+
+.connect-line svg { color: var(--pink); flex-shrink: 0; }
+
+.hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--brown);
+}
+
+.hours-row.closed { color: var(--muted); }
+
+.hours-time { color: var(--dark); font-weight: 600; }
+.hours-row.closed .hours-time { color: var(--muted); font-weight: 400; }
+
+/* Subtle watermark inside card */
+.card-watermark {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    opacity: 0.04;
+    pointer-events: none;
+}
+
+/* Divider between blocks */
+.block-divider {
+    height: 1px;
+    background: rgba(221, 191, 198, 0.4);
+    border: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────────── */
+.contact-footer {
+    background: #F0EDED;
+    border-top: 1px solid #E5E7EB;
+    padding: 72px 24px 48px;
+}
+
+.contact-footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.footer-brand { flex: 1.2; min-width: 220px; }
+
+.footer-brand-title {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 24px;
+    color: var(--dark);
+    margin-bottom: 12px;
+}
+
+.footer-tagline {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--brown);
+    max-width: 300px;
+    margin-bottom: 16px;
+}
+
+.footer-copy { font-size: 13px; color: var(--muted); }
+
+.footer-col { flex: 1; min-width: 140px; }
+
+.footer-col h3 {
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--dark);
+    margin-bottom: 16px;
+}
+
+.footer-col a,
+.footer-col p {
+    display: block;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--brown);
+    text-decoration: none;
+    margin-bottom: 8px;
+}
+
+.footer-col a:hover { color: var(--pink); }
+
+.social-row { display: flex; gap: 12px; margin-top: 4px; }
+
+.social-btn {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(221, 191, 198, 0.6);
+    border-radius: 10px;
+    color: var(--brown);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.social-btn:hover { border-color: var(--pink); color: var(--pink); }
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .contact-bento { flex-direction: column; }
+    .form-card { padding: 36px; }
+}
+
+@media (max-width: 600px) {
+    .contact-main { padding: 40px 16px 72px; }
+    .contact-hero h1 { font-size: 40px; }
+    .form-card { padding: 28px 20px; }
+    .form-row-2 { flex-direction: column; gap: 22px; }
+    .contact-send-btn { width: 100%; justify-content: center; }
+}

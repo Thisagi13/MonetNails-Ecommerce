@@ -1,0 +1,611 @@
+/* ============================================================
+   assets/css/booking.css — Monet Nails Appointment Booking Styles
+   ============================================================ */
+
+:root {
+    --bk-dark:        #1C1B1B;
+    --bk-muted:       #574147;
+    --bk-pink:        #A9275E;
+    --bk-pink-hover:  #8F1F4F;
+    --bk-disabled:    #DDBFC6;
+    --bk-border:      #DDBFC6;
+    --bk-badge-bg:    #F2DDE2;
+    --bk-badge-text:  #24191C;
+    --bk-bg:          #FCF9F8;
+    --bk-card-bg:     #F6F3F2;
+    --bk-placeholder: #6B7280;
+    --bk-serif:       'Bodoni Moda', Georgia, serif;
+    --bk-sans:        'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body.booking-page {
+    font-family: var(--bk-sans);
+    background: var(--bk-bg);
+    color: var(--bk-dark);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.booking-page * {
+    box-sizing: border-box;
+}
+
+.booking-wrapper {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Background decorative floral/ambient accent */
+.booking-bg-art {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 580px;
+    height: 580px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(169, 39, 94, 0.05) 0%, rgba(242, 221, 226, 0.01) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---------------- Main Content ---------------- */
+.booking-main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.booking-hero {
+    text-align: center;
+}
+
+.booking-hero h1 {
+    font-family: var(--bk-serif);
+    font-weight: 400;
+    font-size: 60px;
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+    color: var(--bk-dark);
+    margin: 0;
+}
+
+.booking-hero p {
+    max-width: 672px;
+    margin: 16px auto 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--bk-muted);
+}
+
+/* ---------------- Alerts ---------------- */
+.booking-message {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.booking-message.success {
+    background: #E8F4EC;
+    color: #1E6B40;
+    border: 1px solid #BFE0CC;
+}
+
+.booking-message.error {
+    background: #FBEAF1;
+    color: var(--bk-pink);
+    border: 1px solid var(--bk-border);
+}
+
+/* ---------------- Two Columns: Form & Summary ---------------- */
+.booking-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 48px;
+}
+
+.booking-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 54px;
+    min-width: 0;
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.section-head .divider {
+    width: 40px;
+    height: 2px;
+    background: var(--bk-pink);
+}
+
+.section-head h2 {
+    font-family: var(--bk-serif);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.3;
+    color: var(--bk-dark);
+    margin: 0;
+}
+
+.category-label {
+    font-size: 13px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--bk-muted);
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+/* ---------------- 1. Select Service ---------------- */
+.service-group {
+    margin-bottom: 32px;
+}
+
+.service-group:last-child {
+    margin-bottom: 0;
+}
+
+.service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.service-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid rgba(221, 191, 198, 0.4);
+    background: #FFFFFF;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.service-option:hover {
+    background: rgba(242, 221, 226, 0.35);
+    border-color: var(--bk-border);
+}
+
+.service-option input[type="radio"],
+.service-option input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1.5px solid var(--bk-border);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.service-option input::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    transform: scale(0);
+    transition: transform 0.15s ease;
+}
+
+.service-option input:checked {
+    background: var(--bk-pink);
+    border-color: var(--bk-pink);
+}
+
+.service-option input:checked::before {
+    transform: scale(1);
+}
+
+.service-info {
+    flex: 1;
+}
+
+.service-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.service-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--bk-dark);
+}
+
+.service-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--bk-pink);
+    white-space: nowrap;
+}
+
+.service-desc {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--bk-muted);
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.duration-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    color: var(--bk-badge-text);
+    background: var(--bk-badge-bg);
+    border-radius: 12px;
+}
+
+/* ---------------- 2. Date & Time ---------------- */
+.datetime-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.calendar {
+    flex: 1;
+    max-width: 420px;
+    background: #FFFFFF;
+    border: 1px solid var(--bk-border);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cal-nav {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    line-height: 0;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.cal-nav:hover:not(:disabled) {
+    background: var(--bk-badge-bg);
+}
+
+.cal-nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.cal-month {
+    font-size: 14px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--bk-dark);
+}
+
+.cal-weekdays,
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 16px;
+}
+
+.cal-weekdays span {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bk-muted);
+}
+
+.cal-day {
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    font-family: var(--bk-sans);
+    font-size: 15px;
+    color: var(--bk-dark);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cal-day:hover:not(:disabled) {
+    background: var(--bk-badge-bg);
+}
+
+.cal-day:disabled {
+    color: var(--bk-disabled);
+    cursor: default;
+}
+
+.cal-day.selected {
+    background: var(--bk-dark);
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.time-slots {
+    flex: 1;
+}
+
+.time-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.time-btn {
+    flex: 0 0 calc(50% - 5px);
+    padding: 12px 16px;
+    border: 1px solid var(--bk-border);
+    border-radius: 6px;
+    background: #FFFFFF;
+    font-family: var(--bk-sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--bk-dark);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.time-btn:hover:not(:disabled) {
+    border-color: var(--bk-pink);
+    background: rgba(169, 39, 94, 0.04);
+}
+
+.time-btn:disabled {
+    border-color: rgba(221, 191, 198, 0.3);
+    color: var(--bk-disabled);
+    cursor: not-allowed;
+    background: #FAF7F7;
+}
+
+.time-btn.selected {
+    border-color: var(--bk-pink);
+    color: #FFFFFF;
+    background: var(--bk-pink);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(169, 39, 94, 0.2);
+}
+
+/* ---------------- 3. Your Details ---------------- */
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .field {
+    flex: 1;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bk-muted);
+}
+
+.field input,
+.field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: #FFFFFF;
+    border: 1px solid var(--bk-border);
+    border-radius: 4px;
+    font-family: var(--bk-sans);
+    font-size: 15px;
+    color: var(--bk-dark);
+    transition: border-color 0.2s ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+    color: var(--bk-placeholder);
+}
+
+.field textarea {
+    height: 96px;
+    resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: var(--bk-pink);
+    box-shadow: 0 0 0 2px rgba(169, 39, 94, 0.1);
+}
+
+/* ---------------- Sidebar / Booking Summary ---------------- */
+.booking-sidebar {
+    width: 384px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 24px;
+}
+
+.summary-card {
+    position: relative;
+    background: var(--bk-card-bg);
+    border: 1px solid var(--bk-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    padding: 32px;
+}
+
+.summary-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 72px;
+    height: 72px;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.summary-card h3 {
+    font-family: var(--bk-serif);
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0 0 24px;
+    color: var(--bk-dark);
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--bk-border);
+}
+
+.summary-line.no-border {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.line-main {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--bk-dark);
+    margin: 0;
+}
+
+.line-sub {
+    font-size: 13px;
+    color: var(--bk-muted);
+    margin-top: 4px;
+}
+
+.line-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--bk-dark);
+    white-space: nowrap;
+    margin: 0;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--bk-border);
+    margin-top: 16px;
+}
+
+.summary-total span {
+    font-family: var(--bk-serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--bk-dark);
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--bk-pink);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--bk-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(169, 39, 94, 0.25);
+    transition: all 0.2s ease;
+}
+
+.confirm-btn:hover {
+    background: var(--bk-pink-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(169, 39, 94, 0.35);
+}
+
+.summary-note {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--bk-muted);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 991px) {
+    .booking-layout {
+        flex-direction: column;
+    }
+    .booking-sidebar {
+        width: 100%;
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .booking-hero h1 {
+        font-size: 40px;
+    }
+    .datetime-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .calendar {
+        max-width: none;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

@@ -1,0 +1,389 @@
+/* ============================================================
+   assets/css/services.css — Monet Nails Atelier Services Styles
+   ============================================================ */
+
+:root {
+    --srv-bg:          #FCF9F8;
+    --srv-dark:        #1C1B1B;
+    --srv-muted:       #574147;
+    --srv-rose:        #A9275E;
+    --srv-pink-bg:     #F2DDE2;
+    --srv-border:      rgba(221, 191, 198, 1);
+    --srv-border-soft: rgba(221, 191, 198, 0.3);
+    --srv-footer-bg:   #F0EDED;
+    --srv-font-body:   'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --srv-font-serif:  'Bodoni Moda', Georgia, serif;
+}
+
+body.services-page {
+    font-family: var(--srv-font-body);
+    background-color: var(--srv-bg);
+    color: var(--srv-dark);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+.services-page * {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   HERO ("Elevated Artistry")
+   ============================================================ */
+.srv-hero {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 24px 60px 24px;
+    overflow: hidden;
+}
+
+.srv-hero-bg-accent {
+    position: absolute;
+    top: -40px;
+    right: 20px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(169, 39, 94, 0.08) 0%, rgba(242, 221, 226, 0.02) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.srv-hero-text {
+    position: relative;
+    max-width: 680px;
+    z-index: 2;
+}
+
+.srv-hero-text h1 {
+    font-family: var(--srv-font-serif);
+    font-weight: 400;
+    font-size: 64px;
+    letter-spacing: -1.28px;
+    line-height: 1.1;
+    color: var(--srv-rose);
+    margin: 0;
+}
+
+.srv-hero-text p {
+    margin-top: 24px;
+    max-width: 580px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--srv-muted);
+}
+
+/* ============================================================
+   SERVICES LISTS (Manicures / Pedicures)
+   ============================================================ */
+.srv-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 80px 24px;
+}
+
+.srv-cols {
+    display: flex;
+    gap: 64px;
+}
+
+.srv-col {
+    flex: 1;
+}
+
+.srv-col-header {
+    display: flex;
+    align-items: center;
+}
+
+.srv-col-header h2 {
+    font-family: var(--srv-font-serif);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 48px;
+    color: var(--srv-dark);
+    margin: 0;
+    white-space: nowrap;
+}
+
+.srv-col-header .srv-divider {
+    flex: 1;
+    height: 1px;
+    margin-left: 24px;
+    background-color: var(--srv-border);
+}
+
+.srv-list {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.srv-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed rgba(221, 191, 198, 0.4);
+    transition: transform 0.2s ease;
+}
+
+.srv-item:last-child {
+    border-bottom: none;
+}
+
+.srv-item:hover {
+    transform: translateX(4px);
+}
+
+.srv-info {
+    max-width: 448px;
+}
+
+.srv-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.srv-title h3 {
+    font-family: var(--srv-font-serif);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.3;
+    color: var(--srv-dark);
+    margin: 0;
+}
+
+.srv-badge {
+    padding: 4px 12px;
+    background-color: var(--srv-pink-bg);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    line-height: 16px;
+    color: var(--srv-dark);
+    text-transform: uppercase;
+}
+
+.srv-duration {
+    font-size: 12px;
+    color: var(--srv-muted);
+    font-weight: 500;
+}
+
+.srv-desc {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--srv-muted);
+}
+
+.srv-price {
+    font-family: var(--srv-font-serif);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.3;
+    color: var(--srv-rose);
+    white-space: nowrap;
+    text-align: right;
+    margin: 0;
+}
+
+/* ============================================================
+   SPECIALTY ENHANCEMENTS (3 cards)
+   ============================================================ */
+.srv-specialty {
+    margin-top: 80px;
+}
+
+.srv-specialty h2 {
+    font-family: var(--srv-font-serif);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 48px;
+    color: var(--srv-dark);
+    margin: 0;
+}
+
+.srv-enhance-grid {
+    margin-top: 40px;
+    display: flex;
+    gap: 32px;
+}
+
+.srv-enhance-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px;
+    background: #FFFFFF;
+    border: 1px solid rgba(221, 191, 198, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(169, 39, 94, 0.03);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.srv-enhance-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(169, 39, 94, 0.08);
+    border-color: var(--srv-rose);
+}
+
+.srv-enhance-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--srv-pink-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--srv-rose);
+    margin-bottom: 16px;
+}
+
+.srv-enhance-card h3 {
+    font-family: var(--srv-font-serif);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.3;
+    color: var(--srv-dark);
+    margin: 0;
+}
+
+.srv-enhance-card p {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--srv-muted);
+}
+
+.srv-inquire-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.7px;
+    color: var(--srv-rose);
+    text-decoration: underline;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.srv-inquire-link:hover {
+    color: #7b1641;
+    transform: translateX(3px);
+}
+
+/* ============================================================
+   BOOKING CTA ("Reserve Your Time")
+   ============================================================ */
+.srv-cta {
+    position: relative;
+    padding: 90px 24px;
+    background: linear-gradient(135deg, rgba(242, 221, 226, 0.45) 0%, rgba(252, 249, 248, 0.8) 100%);
+    border-top: 1px solid var(--srv-border-soft);
+    border-bottom: 1px solid var(--srv-border-soft);
+    overflow: hidden;
+}
+
+.srv-cta-content {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 2;
+}
+
+.srv-cta-content h2 {
+    font-family: var(--srv-font-serif);
+    font-weight: 400;
+    font-size: 56px;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    color: var(--srv-dark);
+    margin: 0;
+}
+
+.srv-cta-content p {
+    margin-top: 20px;
+    max-width: 580px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--srv-muted);
+}
+
+.srv-btn-book {
+    margin-top: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background-color: var(--srv-dark);
+    border: 1px solid var(--srv-dark);
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(28, 27, 27, 0.15);
+    transition: all 0.25s ease;
+}
+
+.srv-btn-book:hover {
+    background-color: var(--srv-rose);
+    border-color: var(--srv-rose);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(169, 39, 94, 0.25);
+    color: #FFFFFF;
+}
+
+.srv-btn-book svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.srv-btn-book:hover svg {
+    transform: translateX(3px);
+}
+
+/* ============================================================
+   RESPONSIVENESS
+   ============================================================ */
+@media (max-width: 900px) {
+    .srv-hero {
+        padding: 60px 20px 40px 20px;
+    }
+    .srv-hero-text h1 {
+        font-size: 42px;
+    }
+    .srv-section {
+        padding: 30px 20px 60px 20px;
+    }
+    .srv-cols {
+        flex-direction: column;
+        gap: 50px;
+    }
+    .srv-enhance-grid {
+        flex-direction: column;
+    }
+    .srv-cta {
+        padding: 60px 20px;
+    }
+    .srv-cta-content h2 {
+        font-size: 38px;
+    }
+}

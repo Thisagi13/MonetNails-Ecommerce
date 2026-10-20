@@ -68,7 +68,7 @@ class ProductController
 
                 if ($this->cartModel->addItem($userId, $sessionKey, $product['product_id'], 1)) {
                     if ($action === 'buy_now') {
-                        header("Location: Checkout.php");
+                        header("Location: index.php?page=checkout");
                         exit;
                     }
                     $added = true;

@@ -76,17 +76,12 @@ class VerifyController
         $notice   = '';
 
         // ── POST ─────────────────────────────────────────────────────
-        $otpDigits = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = trim($_POST['action'] ?? '');
-            if ($action !== 'resend') {
-                $action = 'verify';
-            }
 
             // Build the 6-digit string from the six separate boxes
             $otp = '';
             if (isset($_POST['otp']) && is_array($_POST['otp'])) {
-                $otpDigits = $_POST['otp'];
                 foreach ($_POST['otp'] as $digit) {
                     $otp .= trim($digit);
                 }
@@ -155,10 +150,10 @@ class VerifyController
         // 16-character app password here (not your regular password).
         //
         $smtpHost     = 'smtp.gmail.com';
-        $smtpUsername = 'omethrathisagi@gmail.com';
-        $smtpPassword = 'xplcqvgqruxcdwfv';
+        $smtpUsername = 'omethrathisagi@gmail.com';   // ← change this
+        $smtpPassword = 'xplc qvgq ruxc dwfv';       // ← change this
         $smtpPort     = 587;
-        $fromEmail    = 'omethrathisagi@gmail.com';
+        $fromEmail    = 'omethrathisagi@gmail.com';    // ← change this
         $fromName     = 'Monet Nails';
         // ─────────────────────────────────────────────────────────────
 

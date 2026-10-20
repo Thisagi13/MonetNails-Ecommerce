@@ -26,25 +26,10 @@ function galleryImgUrl($url): string {
 <body>
 
 <!-- ==================== TOP NAV ==================== -->
-<nav class="top-nav" id="top-nav">
-  <div class="nav-inner">
-    <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" id="nav-logo">
-      <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/node-210.png" alt="Monet Nails" class="logo-img">
-    </a>
-    <div class="nav-links">
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" id="nav-home">Home</a>
-      <a href="about.php" id="nav-about">About</a>
-      <a href="services.php" id="nav-services">Services</a>
-      <a href="index.php?page=gallery" class="active" id="nav-gallery">Gallery</a>
-      <a href="index.php?page=cart" id="nav-cart">Cart</a>
-      <a href="contact.php" id="nav-contact">Contact</a>
-    </div>
-    <div class="nav-actions">
-      <a href="index.php?page=signup" class="signup-link" id="nav-signup">Sign up</a>
-      <a href="index.php?page=signin" class="login-btn" id="nav-login">Login</a>
-    </div>
-  </div>
-</nav>
+<?php
+$activeNav = 'gallery';
+require __DIR__ . '/../../includes/header.php';
+?>
 
 <!-- ==================== HERO ==================== -->
 <header class="hero" id="gallery-hero">
@@ -94,7 +79,7 @@ function galleryImgUrl($url): string {
         </h3>
         <p class="card-price">Rs. <?php echo number_format((float)$product['price'], 0); ?></p>
         <div class="card-actions">
-          <a class="btn-buy" href="index.php?page=product&id=<?php echo (int)$product['product_id']; ?>">Buy Now</a>
+          <a class="btn-buy" href="index.php?page=checkout&buy_now_product_id=<?php echo (int)$product['product_id']; ?>">Buy Now</a>
           <a class="btn-cart" href="index.php?page=cart&action=add&product_id=<?php echo (int)$product['product_id']; ?>">Add to Cart</a>
         </div>
       </article>
@@ -121,7 +106,7 @@ function galleryImgUrl($url): string {
       <h4>Explore</h4>
       <a href="services.php">Services</a>
       <a href="booking.php">Booking</a>
-      <a href="about.php">About Us</a>
+      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=about">About Us</a>
       <a href="privacy.php">Privacy Policy</a>
     </div>
 

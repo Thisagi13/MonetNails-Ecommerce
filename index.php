@@ -21,11 +21,55 @@ if (session_status() === PHP_SESSION_NONE) {
 $page = strtolower(trim($_GET['page'] ?? $_GET['controller'] ?? 'home'));
 
 switch ($page) {
+    case 'booking':
+    case 'appointment':
+    case 'appointments':
+        require_once __DIR__ . '/controllers/BookingController.php';
+        $controller = new BookingController($pdo);
+        $controller->index();
+        break;
+
+    case 'booking_success':
+        require_once __DIR__ . '/controllers/BookingController.php';
+        $controller = new BookingController($pdo);
+        $controller->success();
+        break;
+
+    case 'booking_notify':
+        require_once __DIR__ . '/controllers/BookingController.php';
+        $controller = new BookingController($pdo);
+        $controller->notify();
+        break;
+
+    case 'about':
+    case 'about_us':
+    case 'aboutus':
+        require_once __DIR__ . '/controllers/AboutController.php';
+        $controller = new AboutController($pdo);
+        $controller->index();
+        break;
+
+    case 'services':
+    case 'service':
+        require_once __DIR__ . '/controllers/ServiceController.php';
+        $controller = new ServiceController($pdo);
+        $controller->index();
+        break;
+
     case 'gallery':
         require_once __DIR__ . '/controllers/GalleryController.php';
         $controller = new GalleryController($pdo);
         $controller->index();
         break;
+
+    case 'contact':
+    case 'contact_us':
+    case 'contactus':
+        require_once __DIR__ . '/controllers/ContactController.php';
+        $controller = new ContactController($pdo);
+        $controller->index();
+        break;
+
 
     case 'cart':
         require_once __DIR__ . '/controllers/CartController.php';
@@ -39,8 +83,37 @@ switch ($page) {
         $controller->index();
         break;
 
+    case 'checkout':
+        require_once __DIR__ . '/controllers/CheckoutController.php';
+        $controller = new CheckoutController($pdo);
+        $controller->index();
+        break;
+
+    case 'order_success':
+        require_once __DIR__ . '/controllers/CheckoutController.php';
+        $controller = new CheckoutController($pdo);
+        $controller->success();
+        break;
+
+    case 'payhere_notify':
+        require_once __DIR__ . '/controllers/CheckoutController.php';
+        $controller = new CheckoutController($pdo);
+        $controller->notify();
+        break;
+
+    case 'admin':
+    case 'admin_dashboard':
+        require_once __DIR__ . '/controllers/AdminController.php';
+        $controller = new AdminController($pdo);
+        $controller->dashboard();
+        break;
+
     case 'signin':
     case 'login':
+        if (isset($_SESSION['admin_id']) || (isset($_SESSION['role']) && $_SESSION['role'] === 'admin')) {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=admin');
+            exit;
+        }
         if (isset($_SESSION['customer_id'])) {
             header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/');
             exit;

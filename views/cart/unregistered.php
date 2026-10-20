@@ -32,25 +32,10 @@ function cartItemImg($url): string {
 <body>
 
 <!-- ==================== TOP NAV ==================== -->
-<nav class="top-nav" id="top-nav">
-  <div class="nav-inner">
-    <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" id="nav-logo">
-      <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/node-210.png" alt="Monet Nails" class="logo-img">
-    </a>
-    <div class="nav-links">
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" id="nav-home">Home</a>
-      <a href="about.php" id="nav-about">About</a>
-      <a href="services.php" id="nav-services">Services</a>
-      <a href="index.php?page=gallery" id="nav-gallery">Gallery</a>
-      <a href="index.php?page=cart" class="active" id="nav-cart">Cart</a>
-      <a href="contact.php" id="nav-contact">Contact</a>
-    </div>
-    <div class="nav-actions">
-      <a href="index.php?page=signup" class="signup-link" id="nav-signup">Sign up</a>
-      <a href="index.php?page=signin" class="login-btn" id="nav-login">Login</a>
-    </div>
-  </div>
-</nav>
+<?php
+$activeNav = 'cart';
+require __DIR__ . '/../../includes/header.php';
+?>
 
 <!-- ==================== BREADCRUMB ==================== -->
 <div class="breadcrumb-bar">
@@ -205,9 +190,9 @@ function cartItemImg($url): string {
             <div class="summary-note">LKR, VAT &amp; DUTIES INCLUDED</div>
           </div>
 
-          <a href="index.php?page=signin" class="checkout-btn" id="checkout-btn">
+          <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=checkout" class="checkout-btn" id="checkout-btn">
             <svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M1.5 15.75c-.41 0-.77-.15-1.06-.44C.15 15.02 0 14.66 0 14.25v-7.5c0-.41.15-.77.44-1.06.29-.29.65-.44 1.06-.44h.75V3.75C2.25 2.71 2.62 1.83 3.35 1.1 4.08.37 4.96 0 6 0s1.92.37 2.65 1.1c.73.73 1.1 1.61 1.1 2.65v1.5h.75c.41 0 .77.15 1.06.44.29.29.44.65.44 1.06v7.5c0 .41-.15.77-.44 1.06-.29.29-.65.44-1.06.44h-9Zm0-1.5h9v-7.5h-9v7.5ZM6 12c.41 0 .77-.15 1.06-.44.29-.29.44-.65.44-1.06 0-.41-.15-.77-.44-1.06A1.45 1.45 0 0 0 6 9c-.41 0-.77.15-1.06.44-.29.29-.44.65-.44 1.06 0 .41.15.77.44 1.06.29.29.65.44 1.06.44ZM3.75 5.25h4.5v-1.5c0-.625-.22-1.156-.66-1.594C7.16 1.72 6.63 1.5 6 1.5s-1.16.22-1.59.66c-.44.44-.66.97-.66 1.59v1.5Z" fill="#fff"/></svg>
-            <span>SIGN IN TO CHECKOUT</span>
+            <span>PROCEED TO CHECKOUT</span>
           </a>
         </div>
       </aside>
@@ -231,7 +216,7 @@ function cartItemImg($url): string {
       <h4>Explore</h4>
       <a href="services.php">Services</a>
       <a href="booking.php">Booking</a>
-      <a href="about.php">About Us</a>
+      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=about">About Us</a>
       <a href="privacy.php">Privacy Policy</a>
     </div>
     <div class="footer-col">
