@@ -16,17 +16,20 @@
 
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../models/Customer.php';
+require_once __DIR__ . '/../models/Cart.php';
 
 class AuthController
 {
     private ?PDO $pdo = null;
     private ?Customer $customerModel = null;
+    private ?Cart $cartModel = null;
 
     public function __construct(?PDO $pdo = null)
     {
         $this->pdo = $pdo;
         if ($pdo !== null) {
             $this->customerModel = new Customer($pdo);
+            $this->cartModel     = new Cart($pdo);
         }
     }
 
@@ -56,7 +59,22 @@ class AuthController
             }
 
             if (empty($errors)) {
-                if ($role === 'admin') {
+                // Auto-detect admin user so admin can use the standard customer signin form
+                $isAdmin = false;
+                try {
+                    $stmt = $this->pdo->prepare('SELECT admin_id FROM admins WHERE email = ? LIMIT 1');
+                    $stmt->execute([$email]);
+                    $isAdmin = (bool)$stmt->fetch();
+                    if (!$isAdmin) {
+                        $stmt = $this->pdo->prepare('SELECT admin_id FROM admin WHERE email = ? LIMIT 1');
+                        $stmt->execute([$email]);
+                        $isAdmin = (bool)$stmt->fetch();
+                    }
+                } catch (Exception $e) {
+                    $isAdmin = false;
+                }
+
+                if ($isAdmin || $role === 'admin') {
                     $this->_handleAdminLogin($email, $password, $errors);
                 } else {
                     $this->_handleCustomerLogin($email, $password, $errors);
@@ -206,17 +224,44 @@ class AuthController
         $_SESSION['customer_name'] = $user['f_name'] . ' ' . $user['l_name'];
         $_SESSION['role']          = 'customer';
 
+        // Transfer any guest cart items to the logged-in customer
+        if ($this->cartModel !== null) {
+            $this->cartModel->transferGuestCart(session_id(), (int)$user['customer_id']);
+        }
+
+        // Check if there is a pending redirect (e.g. checkout)
+        $redirect = $_SESSION['redirect_after_login'] ?? $_GET['redirect'] ?? '';
+        unset($_SESSION['redirect_after_login']);
+
+        if ($redirect === 'checkout') {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=checkout');
+            exit;
+        }
+
         header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/');
         exit;
     }
 
     private function _handleAdminLogin(string $email, string $password, array &$errors): void
     {
-        $stmt = $this->pdo->prepare(
-            'SELECT admin_id, f_name, l_name, email, password FROM admins WHERE email = ? LIMIT 1'
-        );
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
+        $user = null;
+        try {
+            $stmt = $this->pdo->prepare(
+                'SELECT admin_id, f_name, l_name, email, password FROM admins WHERE email = ? LIMIT 1'
+            );
+            $stmt->execute([$email]);
+            $user = $stmt->fetch();
+        } catch (Exception $e) {}
+
+        if (!$user) {
+            try {
+                $stmt = $this->pdo->prepare(
+                    'SELECT admin_id, f_name, l_name, email, password FROM admin WHERE email = ? LIMIT 1'
+                );
+                $stmt->execute([$email]);
+                $user = $stmt->fetch();
+            } catch (Exception $e) {}
+        }
 
         if (!$user) {
             $errors[] = 'No admin account found with that email.';
@@ -231,7 +276,7 @@ class AuthController
         $_SESSION['admin_name'] = $user['f_name'] . ' ' . $user['l_name'];
         $_SESSION['role']       = 'admin';
 
-        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/dashboard.php');
+        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=admin');
         exit;
     }
 }

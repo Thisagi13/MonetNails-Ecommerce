@@ -24,7 +24,7 @@ class Cart
 
         // Check if existing item exists for this user / session
         if ($userId !== null) {
-            $stmt = $this->db->prepare("SELECT cart_id, quantity FROM cart_items WHERE user_id = ? AND product_id = ? LIMIT 1");
+            $stmt = $this->db->prepare("SELECT cart_id, quantity FROM cart_items WHERE customer_id = ? AND product_id = ? LIMIT 1");
             $stmt->execute([$userId, $productId]);
         } else {
             $stmt = $this->db->prepare("SELECT cart_id, quantity FROM cart_items WHERE session_key = ? AND product_id = ? LIMIT 1");
@@ -37,7 +37,7 @@ class Cart
             return $this->updateQuantity((int)$existing['cart_id'], $newQty, $userId, $sessionKey);
         }
 
-        $sql = "INSERT INTO cart_items (user_id, session_key, product_id, quantity, shape, finish, size_preset, custom_sizing_code, special_features) 
+        $sql = "INSERT INTO cart_items (customer_id, session_key, product_id, quantity, shape, finish, size_preset, custom_code, extras) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
@@ -60,18 +60,18 @@ class Cart
     {
         if ($userId !== null) {
             $sql = "SELECT c.cart_id, c.quantity, c.shape, c.finish, c.size_preset,
-                           c.custom_sizing_code, c.special_features,
+                           c.custom_code, c.extras,
                            p.product_id, p.product_name, p.price,
                            COALESCE(p.image_url, '') AS image_url
                     FROM cart_items c
                     JOIN products p ON p.product_id = c.product_id
-                    WHERE c.user_id = ?
+                    WHERE c.customer_id = ?
                     ORDER BY c.added_at DESC";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$userId]);
         } else {
             $sql = "SELECT c.cart_id, c.quantity, c.shape, c.finish, c.size_preset,
-                           c.custom_sizing_code, c.special_features,
+                           c.custom_code, c.extras,
                            p.product_id, p.product_name, p.price,
                            COALESCE(p.image_url, '') AS image_url
                     FROM cart_items c
@@ -88,7 +88,7 @@ class Cart
     public function removeItem(int $cartId, ?int $userId, string $sessionKey): bool
     {
         if ($userId !== null) {
-            $sql = "DELETE FROM cart_items WHERE cart_id = ? AND user_id = ?";
+            $sql = "DELETE FROM cart_items WHERE cart_id = ? AND customer_id = ?";
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$cartId, $userId]);
         } else {
@@ -105,13 +105,34 @@ class Cart
             return $this->removeItem($cartId, $userId, $sessionKey);
         }
         if ($userId !== null) {
-            $sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND user_id = ?";
+            $sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND customer_id = ?";
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$qty, $cartId, $userId]);
         } else {
             $sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND session_key = ?";
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$qty, $cartId, $sessionKey]);
+        }
+    }
+
+    /** Transfer all guest items to logged-in user */
+    public function transferGuestCart(string $sessionKey, int $userId): void
+    {
+        if (!empty($sessionKey)) {
+            $stmt = $this->db->prepare("UPDATE cart_items SET customer_id = ?, session_key = NULL WHERE session_key = ?");
+            $stmt->execute([$userId, $sessionKey]);
+        }
+    }
+
+    /** Clear all cart items for a user or session */
+    public function clearCart(?int $userId, string $sessionKey): void
+    {
+        if ($userId !== null) {
+            $stmt = $this->db->prepare("DELETE FROM cart_items WHERE customer_id = ?");
+            $stmt->execute([$userId]);
+        } elseif (!empty($sessionKey)) {
+            $stmt = $this->db->prepare("DELETE FROM cart_items WHERE session_key = ?");
+            $stmt->execute([$sessionKey]);
         }
     }
 }

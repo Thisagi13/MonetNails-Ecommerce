@@ -17,25 +17,10 @@
 <body>
 
 <!-- ============ TOP NAV ============ -->
-<nav class="top-nav" id="top-nav">
-  <div class="nav-inner">
-    <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" id="nav-logo">
-      <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/node-210.png" alt="Monet Nails" class="logo-img">
-    </a>
-    <div class="nav-links">
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" class="active" id="nav-home">Home</a>
-      <a href="about.php" id="nav-about">About</a>
-      <a href="services.php" id="nav-services">Services</a>
-      <a href="index.php?page=gallery" id="nav-gallery">Gallery</a>
-      <a href="index.php?page=cart" id="nav-cart">Cart</a>
-      <a href="contact.php" id="nav-contact">Contact</a>
-    </div>
-    <div class="nav-actions">
-      <a href="index.php?page=signup" class="signup-link" id="nav-signup">Sign up</a>
-      <a href="index.php?page=signin" class="login-btn" id="nav-login">Login</a>
-    </div>
-  </div>
-</nav>
+<?php
+$activeNav = 'home';
+require __DIR__ . '/../../includes/header.php';
+?>
 
 <!-- ============ TRUST BAR ============ -->
 <section class="trust-bar" id="trust-bar">
@@ -73,7 +58,7 @@
     </p>
     <div class="hero-btns">
       <a href="booking.php" class="btn-dark" id="hero-book-btn">Book an Appointment</a>
-      <a href="services.php" class="btn-outline" id="hero-services-btn">View Services</a>
+      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=services" class="btn-outline" id="hero-services-btn">View Services</a>
     </div>
   </div>
 </section>
@@ -233,9 +218,9 @@
 
     <div class="footer-col">
       <h4>Explore</h4>
-      <a href="services.php" id="footer-services">Services</a>
-      <a href="booking.php" id="footer-booking">Booking</a>
-      <a href="about.php" id="footer-about">About Us</a>
+      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=services" id="footer-services">Services</a>
+      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=booking" id="footer-booking">Booking</a>
+      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=about" id="footer-about">About Us</a>
       <a href="privacy.php" id="footer-privacy">Privacy Policy</a>
     </div>
 
