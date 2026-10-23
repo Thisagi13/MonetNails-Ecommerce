@@ -57,6 +57,16 @@
               <span style="color:var(--muted);">Payment Method:</span>
               <strong><?php echo htmlspecialchars($order['payment_method']); ?></strong>
             </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="color:var(--muted);">Order Status:</span>
+              <strong><span style="padding:3px 10px;border-radius:12px;background:#EFF7F2;color:#42806A;font-size:12px;font-weight:600;"><?php echo htmlspecialchars(ucfirst($order['status'] ?? 'Pending')); ?></span></strong>
+            </div>
+            <?php if (!empty($order['tracking_number'])): ?>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="color:var(--muted);">Tracking Reference:</span>
+              <strong style="color:#BE536D;font-family:monospace;"><?php echo htmlspecialchars($order['tracking_number']); ?></strong>
+            </div>
+            <?php endif; ?>
             <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px;margin-top:10px;">
               <span style="color:var(--muted);">Total Amount:</span>
               <strong style="color:var(--pink);font-size:16px;">Rs. <?php echo number_format((float)$order['total_amount'], 2); ?></strong>

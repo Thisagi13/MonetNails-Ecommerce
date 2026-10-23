@@ -564,13 +564,121 @@ class AdminController
 
     public function manageOrders(): void
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Verify admin access
         if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
-            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin');
+            $_SESSION['redirect_after_login'] = 'admin_orders';
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&redirect=admin_orders');
             exit;
         }
-        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=admin');
-        exit;
+
+        $adminId   = (int)($_SESSION['admin_id'] ?? 0);
+        $adminName = $_SESSION['admin_name'] ?? 'Damika Rajithuru';
+        $adminParts = preg_split('/\s+/', trim($adminName));
+        $adminFirstName = $adminParts[0] ?? 'Damika';
+        $adminInitials  = strtoupper(substr($adminFirstName, 0, 1) . substr($adminParts[1] ?? '', 0, 1));
+        if (empty($adminInitials)) {
+            $adminInitials = 'MA';
+        }
+
+        $orderModel = new Order($this->pdo);
+
+        // Handle POST actions: Status & fulfillment updates
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $action = $_POST['action'] ?? '';
+
+            if ($action === 'update_fulfillment') {
+                $orderId = (int)($_POST['order_id'] ?? 0);
+                $status  = trim($_POST['status'] ?? 'Pending');
+                $trackingNumber = trim($_POST['tracking_number'] ?? '');
+                $adminNotes = trim($_POST['admin_notes'] ?? '');
+
+                $allowedStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+                if (!in_array($status, $allowedStatuses, true)) {
+                    $status = 'Pending';
+                }
+
+                if ($orderId > 0) {
+                    $orderModel->updateOrderFulfillment(
+                        $orderId,
+                        $status,
+                        $trackingNumber ?: null,
+                        $adminNotes ?: null,
+                        $adminId ?: null
+                    );
+
+                    $_SESSION['flash_success'] = "Order #ORD-" . str_pad($orderId, 4, '0', STR_PAD_LEFT) . " status updated to {$status}.";
+                }
+
+                $filter = $_GET['filter'] ?? 'all';
+                $page = (int)($_GET['p'] ?? 1);
+                header("Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=admin_orders&order_id={$orderId}&filter=" . urlencode($filter) . "&p={$page}");
+                exit;
+            }
+        }
+
+        // URL Parameters
+        $filter = trim($_GET['filter'] ?? 'all');
+        $search = trim($_GET['search'] ?? '');
+        $page   = max(1, (int)($_GET['p'] ?? 1));
+        $selectedOrderId = (int)($_GET['order_id'] ?? 0);
+
+        // CSV Export Handler
+        if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+            $exportData = $orderModel->getAdminOrders($filter, $search, 1, 10000);
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="monet_atelier_orders_' . date('Y-m-d') . '.csv"');
+            $out = fopen('php://output', 'w');
+
+            fputcsv($out, ['Order ID', 'Customer Name', 'Email', 'Phone', 'Address', 'Items', 'Subtotal', 'Shipping', 'Tax', 'Total Amount', 'Status', 'Tracking Number', 'Payment Method', 'Date']);
+            foreach ($exportData['orders'] as $ord) {
+                $itemStrs = [];
+                foreach ($ord['items'] as $it) {
+                    $itemStrs[] = $it['product_name'] . ' (x' . $it['quantity'] . ')';
+                }
+                fputcsv($out, [
+                    '#ORD-' . str_pad($ord['order_id'], 4, '0', STR_PAD_LEFT),
+                    $ord['customer_name'],
+                    $ord['customer_email'],
+                    $ord['customer_phone'],
+                    $ord['customer_address'],
+                    implode('; ', $itemStrs),
+                    $ord['subtotal'],
+                    $ord['shipping_fee'],
+                    $ord['tax'] ?? '0.00',
+                    $ord['total_amount'],
+                    $ord['status'],
+                    $ord['tracking_number'] ?? '',
+                    $ord['payment_method'],
+                    $ord['created_at']
+                ]);
+            }
+            fclose($out);
+            exit;
+        }
+
+        // Stats & Listing
+        $stats = $orderModel->getOrderStats();
+        $listing = $orderModel->getAdminOrders($filter, $search, $page, 10);
+        $orders = $listing['orders'];
+        $totalRows = $listing['total_rows'];
+        $totalPages = $listing['total_pages'];
+        $currentPage = $listing['page'];
+
+        // Detail Modal Resolution (only load if explicitly requested via order_id parameter)
+        $orderDetail = null;
+        if ($selectedOrderId > 0) {
+            $orderDetail = $orderModel->getAdminOrderDetail($selectedOrderId);
+        }
+
+        $flashSuccess = $_SESSION['flash_success'] ?? null;
+        unset($_SESSION['flash_success']);
+
+        $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
+        require __DIR__ . '/../views/admin/orders.php';
     }
 
     public function manageUsers(): void
