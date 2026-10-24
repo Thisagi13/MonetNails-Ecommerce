@@ -184,44 +184,6 @@ require __DIR__ . '/../../includes/header.php';
 
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
-  /* Profile Popup */
-  (function () {
-    var btn     = document.getElementById('profileBtn');
-    var popup   = document.getElementById('profilePopup');
-    var overlay = document.getElementById('popupOverlay');
-    var logoutBtn = document.getElementById('popup-logout');
-
-    function togglePopup(e) {
-      e.stopPropagation();
-      var isOpen = popup.classList.toggle('show');
-      if (overlay) overlay.classList.toggle('show', isOpen);
-    }
-
-    function closePopup() {
-      popup.classList.remove('show');
-      if (overlay) overlay.classList.remove('show');
-    }
-
-    if (btn && popup) {
-      btn.addEventListener('click', togglePopup);
-      popup.addEventListener('click', function (e) { e.stopPropagation(); });
-      if (overlay) overlay.addEventListener('click', closePopup);
-      document.addEventListener('click', function (e) {
-        if (popup.classList.contains('show') && !popup.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-          closePopup();
-        }
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closePopup();
-      });
-    }
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', function(e) {
-        window.location.href = this.href;
-      });
-    }
-  })();
 
   /* Filter Modal */
   function openFilters() {

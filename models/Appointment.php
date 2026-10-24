@@ -109,7 +109,79 @@ class Appointment
             (float)($data['total_price'] ?? 0)
         ]);
 
-        return (int)$this->pdo->lastInsertId();
+        $newId = (int)$this->pdo->lastInsertId();
+
+        // Generate reference_no and sync total_amount
+        if ($newId > 0) {
+            $ref = '#MN-APT-' . str_pad((string)$newId, 5, '0', STR_PAD_LEFT);
+            $totalAmount = (float)($data['total_price'] ?? 0);
+            try {
+                $uStmt = $this->pdo->prepare("UPDATE appointment SET reference_no = ?, total_amount = ? WHERE appointment_id = ?");
+                $uStmt->execute([$ref, $totalAmount, $newId]);
+            } catch (Exception $e) {}
+        }
+
+        return $newId;
+    }
+
+    /**
+     * Retrieve upcoming appointments for a customer (pending, booked, confirmed; >= today)
+     */
+    public function getUpcomingForCustomer(int $customerId): array
+    {
+        try {
+            $sql = "SELECT a.*, 
+                           COALESCE(a.total_amount, a.total_price) AS amount,
+                           COALESCE(a.reference_no, CONCAT('#MN-APT-', LPAD(a.appointment_id, 5, '0'))) AS reference_no,
+                           s.name AS service_name, 
+                           s.description AS service_description,
+                           s.duration AS service_duration,
+                           s.category AS service_category,
+                           s.image_url AS service_image,
+                           adm.f_name AS stylist_first_name,
+                           adm.l_name AS stylist_last_name
+                    FROM appointment a
+                    LEFT JOIN service s ON a.service_id = s.service_id
+                    LEFT JOIN admin adm ON a.stylist_admin_id = adm.admin_id
+                    WHERE a.customer_id = ?
+                      AND a.appointment_date >= CURDATE()
+                      AND LOWER(a.status) IN ('pending', 'booked', 'confirmed')
+                    ORDER BY a.appointment_date ASC, a.appointment_time ASC";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$customerId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Retrieve past salon visits for a customer (< today or status in completed, cancelled)
+     */
+    public function getPastForCustomer(int $customerId): array
+    {
+        try {
+            $sql = "SELECT a.*, 
+                           COALESCE(a.total_amount, a.total_price) AS amount,
+                           COALESCE(a.reference_no, CONCAT('#MN-APT-', LPAD(a.appointment_id, 5, '0'))) AS reference_no,
+                           s.name AS service_name, 
+                           s.description AS service_description,
+                           s.duration AS service_duration,
+                           s.category AS service_category,
+                           adm.f_name AS stylist_first_name,
+                           adm.l_name AS stylist_last_name
+                    FROM appointment a
+                    LEFT JOIN service s ON a.service_id = s.service_id
+                    LEFT JOIN admin adm ON a.stylist_admin_id = adm.admin_id
+                    WHERE a.customer_id = ?
+                      AND (a.appointment_date < CURDATE() OR LOWER(a.status) IN ('completed', 'cancelled', 'canceled'))
+                    ORDER BY a.appointment_date DESC, a.appointment_time DESC";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$customerId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return [];
+        }
     }
 
     /**
