@@ -61,11 +61,18 @@ if ($isLoggedIn) {
         $customer_name = $_SESSION['customer_name'] ?? 'Client';
     }
 
+    if (empty($customer_avatar) && !empty($_SESSION['profile_image'])) {
+        $customer_avatar = $_SESSION['profile_image'];
+    }
+
     // 2. Build Avatar HTML if not already created
     if (empty($avatar_html)) {
         $avatarDiskPath = __DIR__ . '/../' . ltrim($customer_avatar ?? '', '/');
         if (!empty($customer_avatar) && file_exists($avatarDiskPath)) {
-            $avatar_html = '<img src="' . htmlspecialchars($customer_avatar) . '" alt="avatar">';
+            $avatarSrc = (strpos($customer_avatar, 'http') === 0 || strpos($customer_avatar, '/') === 0)
+                ? $customer_avatar
+                : $base_url . '/' . ltrim($customer_avatar, '/');
+            $avatar_html = '<img src="' . htmlspecialchars($avatarSrc) . '" alt="avatar">';
         } else {
             $initials = strtoupper(substr($customer_name ?: 'M', 0, 1));
             $avatar_html = '<span class="avatar-initials">' . htmlspecialchars($initials ?: 'M') . '</span>';

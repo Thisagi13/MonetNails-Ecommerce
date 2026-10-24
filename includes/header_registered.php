@@ -82,7 +82,7 @@ if (empty($avatar_html)) {
             </svg>
             Order History &amp; Custom Sets
           </a>
-          <a href="<?php echo $base_url; ?>/account_settings.php" class="popup-item" id="popup-settings">
+          <a href="<?php echo $base_url; ?>/index.php?page=account_settings" class="popup-item <?php echo ($activeNav === 'account_settings') ? 'active' : ''; ?>" id="popup-settings">
             <!-- gear icon -->
             <svg viewBox="0 0 24 24" fill="none" stroke="#A9275E" stroke-width="1.8">
               <circle cx="12" cy="12" r="3"/>
