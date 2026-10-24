@@ -22,6 +22,22 @@ if (empty($avatar_html)) {
 <!-- Stylesheet for Header if not already loaded in <head> -->
 <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/header.css">
 
+<!-- Ensure profile button is always interactive and above layers -->
+<style>
+  .top-nav { position: sticky !important; top: 0 !important; z-index: 200 !important; }
+  .top-nav .nav-actions { position: relative !important; }
+  .top-nav .profile-btn {
+    cursor: pointer !important;
+    z-index: 205 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+  }
+  .top-nav .profile-btn * { pointer-events: none !important; }
+  .profile-popup { position: absolute !important; z-index: 300 !important; }
+  .popup-overlay { position: fixed !important; inset: 0 !important; z-index: 90 !important; }
+  .popup-item svg, .popup-item img { pointer-events: none !important; }
+</style>
+
 <!-- ============ TOP NAV (Registered Customer) ============ -->
 <nav class="top-nav" id="top-nav">
   <div class="nav-inner">
@@ -47,7 +63,7 @@ if (empty($avatar_html)) {
       </a>
 
       <!-- Profile Avatar Button -->
-      <div class="profile-btn" id="profileBtn" title="Profile">
+      <div class="profile-btn" id="profileBtn" title="Profile" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0">
         <?php echo $avatar_html; ?>
       </div>
 
@@ -64,7 +80,7 @@ if (empty($avatar_html)) {
         </div>
 
         <div class="popup-menu">
-          <a href="<?php echo $base_url; ?>/my_appointments.php" class="popup-item" id="popup-appointments">
+          <a href="<?php echo $base_url; ?>/index.php?page=my_appointments" class="popup-item <?php echo ($activeNav === 'my_appointments') ? 'active' : ''; ?>" id="popup-appointments">
             <!-- calendar icon -->
             <svg viewBox="0 0 24 24" fill="none" stroke="#A9275E" stroke-width="1.8">
               <rect x="3" y="5" width="18" height="16" rx="2"/>
@@ -109,50 +125,72 @@ if (empty($avatar_html)) {
 </nav>
 
 <!-- popup backdrop -->
-<div class="popup-overlay" id="popupOverlay"></div>
+<div class="popup-overlay" id="popupOverlay" onclick="window.closeMonetProfilePopup()"></div>
 
 <script>
-  /* Profile popup toggle */
+  /* Robust global profile popup functions */
+  window.toggleMonetProfilePopup = function (e) {
+    if (e) {
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+    var btn     = document.getElementById('profileBtn');
+    var popup   = document.getElementById('profilePopup');
+    var overlay = document.getElementById('popupOverlay');
+    if (!popup) return;
+
+    var isOpen = popup.classList.toggle('show');
+    if (overlay) overlay.classList.toggle('show', isOpen);
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+
+  window.closeMonetProfilePopup = function () {
+    var btn     = document.getElementById('profileBtn');
+    var popup   = document.getElementById('profilePopup');
+    var overlay = document.getElementById('popupOverlay');
+    if (popup)   popup.classList.remove('show');
+    if (overlay) overlay.classList.remove('show');
+    if (btn)     btn.setAttribute('aria-expanded', 'false');
+  };
+
   (function () {
     if (window._monetProfilePopupInit) return;
     window._monetProfilePopupInit = true;
 
     function initPopup() {
-      var btn     = document.getElementById('profileBtn');
-      var popup   = document.getElementById('profilePopup');
-      var overlay = document.getElementById('popupOverlay');
-      var logoutBtn = document.getElementById('popup-logout');
+      var btn   = document.getElementById('profileBtn');
+      var popup = document.getElementById('profilePopup');
 
-      if (!btn || !popup) return;
-
-      function togglePopup(e) {
-        e.stopPropagation();
-        var isOpen = popup.classList.toggle('show');
-        if (overlay) overlay.classList.toggle('show', isOpen);
-      }
-
-      function closePopup() {
-        popup.classList.remove('show');
-        if (overlay) overlay.classList.remove('show');
-      }
-
-      btn.addEventListener('click', togglePopup);
-      popup.addEventListener('click', function (e) { e.stopPropagation(); });
-      if (overlay) overlay.addEventListener('click', closePopup);
-      document.addEventListener('click', function (e) {
-        if (popup.classList.contains('show') && !popup.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-          closePopup();
-        }
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closePopup();
-      });
-
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-          window.location.href = this.href;
+      /* Attach click directly on the button */
+      if (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          window.toggleMonetProfilePopup(e);
+        });
+        /* Keyboard: Enter or Space opens/closes the popup */
+        btn.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            window.toggleMonetProfilePopup(e);
+          }
         });
       }
+
+      if (popup) {
+        popup.addEventListener('click', function (e) { e.stopPropagation(); });
+      }
+
+      document.addEventListener('click', function (e) {
+        var p = document.getElementById('profilePopup');
+        var b = document.getElementById('profileBtn');
+        if (!p || !p.classList.contains('show')) return;
+        if (b && (b === e.target || b.contains(e.target))) return;
+        if (p.contains(e.target)) return;
+        window.closeMonetProfilePopup();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') window.closeMonetProfilePopup();
+      });
     }
 
     if (document.readyState === 'loading') {

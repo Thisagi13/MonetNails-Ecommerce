@@ -42,6 +42,22 @@ if ($fullName === '') {
 
     <!-- Profile Page CSS -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/profile.css">
+
+    <!-- Critical nav/popup overrides (ensure profile icon is always clickable) -->
+    <style>
+      .top-nav { position: sticky !important; top: 0 !important; z-index: 200 !important; }
+      .top-nav .nav-actions { position: relative !important; }
+      .top-nav .profile-btn {
+        cursor: pointer !important;
+        position: relative !important;
+        z-index: 205 !important;
+        pointer-events: auto !important;
+      }
+      .top-nav .profile-btn * { pointer-events: none !important; }
+      .profile-popup { position: absolute !important; z-index: 300 !important; }
+      .popup-overlay { position: fixed !important; inset: 0 !important; z-index: 90 !important; }
+      .popup-item svg, .popup-item img { pointer-events: none !important; }
+    </style>
 </head>
 <body>
 

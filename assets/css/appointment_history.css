@@ -1,0 +1,592 @@
+/* =============================================================
+   assets/css/appointment_history.css — Monet Nails Bar
+   Appointment History & Salon Visits Stylesheet (MVC)
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --mn-dark:        #1C1B1B;
+  --mn-brown:       #574147;
+  --mn-brown-soft:  #6A5A5F;
+  --mn-pink:        #A9275E;
+  --mn-pink-hover:  #8E1F4F;
+  --mn-pink-soft:   #F2DDE2;
+  --mn-pink-bg:     rgba(169, 39, 94, 0.08);
+  --mn-divider:     rgba(221, 191, 198, 0.5);
+  --mn-border-soft: #DDBFC6;
+  --mn-cream:       #FCF9F8;
+  --mn-gray-bg:     #F6F3F2;
+  --mn-gray-light:  #F0EDED;
+  --mn-white:       #FFFFFF;
+  --mn-serif:       'Bodoni Moda', Georgia, serif;
+  --mn-sans:        'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mn-shadow-sm:   0 2px 8px rgba(28, 27, 27, 0.04);
+  --mn-shadow-card: 0 4px 18px rgba(28, 27, 27, 0.06);
+}
+
+/* Page Container */
+.appt-history-page {
+  background-color: var(--mn-cream);
+  min-height: calc(100vh - 80px);
+  padding: 48px 24px 96px;
+  font-family: var(--mn-sans);
+  color: var(--mn-brown);
+}
+
+.appt-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.breadcrumb-nav a {
+  color: var(--mn-brown-soft);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb-nav a:hover {
+  color: var(--mn-pink);
+}
+
+.breadcrumb-nav .sep {
+  color: var(--mn-border-soft);
+  font-weight: 400;
+}
+
+.breadcrumb-nav .current {
+  color: var(--mn-pink);
+}
+
+/* Profile Bar */
+.profile-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: var(--mn-pink-soft);
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(169, 39, 94, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.profile-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-avatar-wrap .initials {
+  font-family: var(--mn-serif);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  color: var(--mn-pink);
+}
+
+.profile-avatar-wrap .sparkle-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-card .info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-card .name {
+  font-family: var(--mn-serif);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  color: var(--mn-dark);
+}
+
+.profile-card .email {
+  font-size: 15px;
+  color: var(--mn-brown-soft);
+}
+
+/* Stats Actions */
+.stats-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.stats-badge {
+  background: var(--mn-gray-bg);
+  border: 1px solid rgba(221, 191, 198, 0.4);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--mn-brown-soft);
+}
+
+.book-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--mn-pink);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 22px;
+  font-family: var(--mn-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(169, 39, 94, 0.25);
+}
+
+.book-btn:hover {
+  background: var(--mn-pink-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(169, 39, 94, 0.35);
+}
+
+.book-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Page Title */
+.page-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page-title h1 {
+  font-family: var(--mn-serif);
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 1.2;
+  color: var(--mn-dark);
+}
+
+.page-title p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--mn-brown);
+  max-width: 640px;
+}
+
+/* Section Headings */
+.history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.section-head .title-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-head .title-block svg {
+  width: 20px;
+  height: 20px;
+  color: var(--mn-pink);
+  flex-shrink: 0;
+}
+
+.section-head h2 {
+  font-family: var(--mn-serif);
+  font-weight: 600;
+  font-size: 26px;
+  color: var(--mn-dark);
+  margin: 0;
+}
+
+.section-head .meta {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--mn-brown-soft);
+}
+
+/* Upcoming Appointment Cards */
+.upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.upcoming-card {
+  background: var(--mn-white);
+  border: 1px solid rgba(221, 191, 198, 0.6);
+  border-radius: 14px;
+  box-shadow: var(--mn-shadow-card);
+  padding: 32px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  flex-wrap: wrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.upcoming-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(28, 27, 27, 0.08);
+}
+
+.upcoming-card .col-main {
+  flex: 1 1 58%;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.upcoming-card .meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mn-brown-soft);
+}
+
+.upcoming-card .meta-row .chip {
+  background: var(--mn-gray-light);
+  border-radius: 4px;
+  padding: 3px 10px;
+  color: var(--mn-dark);
+  font-family: 'SF Mono', Consolas, Monaco, monospace;
+  font-size: 12px;
+}
+
+.upcoming-card .meta-row .chip.paid {
+  background: transparent;
+  color: var(--mn-pink);
+  font-family: var(--mn-sans);
+  font-size: 13px;
+  padding-left: 0;
+}
+
+.upcoming-card .meta-row .chip.status-badge {
+  background: var(--mn-pink-soft);
+  color: var(--mn-pink);
+  font-size: 12px;
+}
+
+.upcoming-card .meta-row .dot {
+  color: var(--mn-border-soft);
+}
+
+.upcoming-card h3 {
+  font-family: var(--mn-serif);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--mn-dark);
+  margin: 0;
+}
+
+.upcoming-card .desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--mn-brown);
+  margin: 0;
+}
+
+/* Date & Time Block on Right */
+.upcoming-card .col-date {
+  flex: 0 0 220px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #FCFAFA;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(221, 191, 198, 0.4);
+}
+
+.upcoming-card .col-date .icon-wrap {
+  width: 40px;
+  height: 40px;
+  background: var(--mn-pink-soft);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--mn-pink);
+  flex-shrink: 0;
+}
+
+.upcoming-card .col-date .icon-wrap svg {
+  width: 18px;
+  height: 18px;
+}
+
+.upcoming-card .col-date .date-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.upcoming-card .col-date .date-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--mn-brown-soft);
+}
+
+.upcoming-card .col-date .date-main {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mn-dark);
+}
+
+.upcoming-card .col-date .date-time {
+  font-size: 13px;
+  color: var(--mn-brown);
+}
+
+/* Past Appointment Cards */
+.past-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.past-card {
+  background: var(--mn-white);
+  border: 1px solid rgba(221, 191, 198, 0.5);
+  border-radius: 12px;
+  box-shadow: var(--mn-shadow-sm);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.past-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(28, 27, 27, 0.06);
+}
+
+.past-card .date-block {
+  flex: 0 0 84px;
+  background: var(--mn-gray-light);
+  border-radius: 10px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid rgba(221, 191, 198, 0.4);
+}
+
+.past-card .date-block .month {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--mn-brown-soft);
+}
+
+.past-card .date-block .day {
+  font-family: var(--mn-serif);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--mn-dark);
+}
+
+.past-card .body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 240px;
+}
+
+.past-card .top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.past-card .top-row h4 {
+  font-family: var(--mn-serif);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--mn-dark);
+  margin: 0;
+}
+
+.past-card .top-row .status {
+  background: var(--mn-gray-bg);
+  border: 1px solid rgba(221, 191, 198, 0.4);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mn-brown-soft);
+}
+
+.past-card .meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--mn-brown);
+}
+
+.past-card .meta-row .dot {
+  color: var(--mn-border-soft);
+}
+
+.past-card .meta-row .lbl {
+  color: var(--mn-brown-soft);
+}
+
+.past-card .meta-row .val {
+  color: var(--mn-dark);
+  font-weight: 600;
+}
+
+/* Empty State Card */
+.empty-state-card {
+  background: var(--mn-white);
+  border: 1px dashed rgba(221, 191, 198, 0.7);
+  border-radius: 14px;
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.empty-state-card .empty-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--mn-pink-soft);
+  color: var(--mn-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state-card .empty-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.empty-state-card h3 {
+  font-family: var(--mn-serif);
+  font-size: 20px;
+  color: var(--mn-dark);
+  margin: 0;
+}
+
+.empty-state-card p {
+  font-size: 14px;
+  color: var(--mn-brown-soft);
+  max-width: 440px;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .upcoming-card .col-date {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .appt-history-page {
+    padding: 32px 16px 64px;
+  }
+
+  .profile-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page-title h1 {
+    font-size: 32px;
+  }
+
+  .upcoming-card {
+    padding: 22px 20px;
+  }
+
+  .past-card {
+    padding: 16px 18px;
+  }
+}

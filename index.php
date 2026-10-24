@@ -187,6 +187,14 @@ switch ($page) {
         $controller->index();
         break;
 
+    case 'my_appointments':
+    case 'appointment_history':
+    case 'appointments_history':
+        require_once __DIR__ . '/controllers/AppointmentHistoryController.php';
+        $controller = new AppointmentHistoryController($pdo);
+        $controller->index();
+        break;
+
     case 'logout':
     case 'signout':
         require_once __DIR__ . '/controllers/AuthController.php';
