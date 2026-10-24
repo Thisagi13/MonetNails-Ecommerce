@@ -112,6 +112,113 @@ class Order
     }
 
     /**
+     * Get full order history for the customer-facing Order History page.
+     * Returns orders with their line items (products) and payment info.
+     *
+     * @param int    $customerId
+     * @param string $statusFilter 'all'|'pending'|'processing'|'shipped'|'delivered'|'cancelled'|'accepted'
+     * @return array
+     */
+    public function getOrderHistoryForCustomer(int $customerId, string $statusFilter = 'all'): array
+    {
+        $statusCond = '';
+        $params = [$customerId];
+        $statusLower = strtolower(trim($statusFilter));
+        if ($statusLower === 'pending')    { $statusCond = " AND LOWER(o.status) = 'pending'"; }
+        elseif ($statusLower === 'processing') { $statusCond = " AND LOWER(o.status) = 'processing'"; }
+        elseif ($statusLower === 'shipped')    { $statusCond = " AND LOWER(o.status) = 'shipped'"; }
+        elseif ($statusLower === 'delivered')  { $statusCond = " AND LOWER(o.status) = 'delivered'"; }
+        elseif ($statusLower === 'cancelled')  { $statusCond = " AND LOWER(o.status) IN ('cancelled','canceled')"; }
+        elseif ($statusLower === 'accepted')   { $statusCond = " AND LOWER(o.status) = 'accepted'"; }
+
+        $sql = "SELECT
+                    o.order_id,
+                    CONCAT('#MN-ORD-', LPAD(o.order_id, 5, '0')) AS reference_no,
+                    o.status,
+                    o.total_amount,
+                    COALESCE(o.subtotal, o.total_amount) AS subtotal,
+                    COALESCE(o.shipping_fee, 0) AS shipping_fee,
+                    NULLIF(TRIM(CONCAT_WS(', ',
+                        COALESCE(NULLIF(TRIM(o.street_address), ''), NULL),
+                        COALESCE(NULLIF(TRIM(o.city), ''), NULL),
+                        COALESCE(NULLIF(TRIM(o.postal_code), ''), NULL)
+                    )), '') AS shipping_address,
+                    o.created_at AS order_date,
+                    p.payment_method,
+                    p.transaction_id,
+                    COALESCE(p.status, 'Pending') AS payment_status
+                FROM orders o
+                LEFT JOIN payments p ON o.order_id = p.order_id
+                WHERE o.customer_id = ? {$statusCond}
+                ORDER BY o.order_id DESC";
+
+        $stmtOrders = $this->db->prepare($sql);
+        $stmtOrders->execute($params);
+        $orders = $stmtOrders->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($orders)) { return []; }
+
+        $orderIds = array_column($orders, 'order_id');
+        $placeholders = implode(',', array_fill(0, count($orderIds), '?'));
+        $itemSql = "SELECT
+                        oi.order_id,
+                        oi.quantity,
+                        oi.unit_price,
+                        COALESCE(oi.subtotal, oi.quantity * oi.unit_price) AS subtotal,
+                        p.product_name,
+                        COALESCE(p.image_url, p.image_path, '') AS image_url,
+                        p.product_id
+                    FROM order_items oi
+                    JOIN products p ON oi.product_id = p.product_id
+                    WHERE oi.order_id IN ({$placeholders})
+                    ORDER BY oi.order_id DESC";
+
+        $stmtItems = $this->db->prepare($itemSql);
+        $stmtItems->execute($orderIds);
+        $itemsRaw = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+        $itemsMap = [];
+        foreach ($itemsRaw as $item) {
+            $itemsMap[$item['order_id']][] = $item;
+        }
+
+        $result = [];
+        foreach ($orders as $order) {
+            $order['items'] = $itemsMap[$order['order_id']] ?? [];
+            $result[] = $order;
+        }
+        return $result;
+    }
+
+    /**
+     * Get per-status order counts for a customer (for filter tab badges).
+     */
+    public function getOrderStatusCountsForCustomer(int $customerId): array
+    {
+        $sql = "SELECT
+                    COUNT(*) AS total,
+                    SUM(CASE WHEN LOWER(status) = 'pending'                 THEN 1 ELSE 0 END) AS pending,
+                    SUM(CASE WHEN LOWER(status) = 'processing'              THEN 1 ELSE 0 END) AS processing,
+                    SUM(CASE WHEN LOWER(status) = 'shipped'                 THEN 1 ELSE 0 END) AS shipped,
+                    SUM(CASE WHEN LOWER(status) = 'delivered'               THEN 1 ELSE 0 END) AS delivered,
+                    SUM(CASE WHEN LOWER(status) IN ('cancelled','canceled') THEN 1 ELSE 0 END) AS cancelled,
+                    SUM(CASE WHEN LOWER(status) = 'accepted'                THEN 1 ELSE 0 END) AS accepted
+                FROM orders WHERE customer_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$customerId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return [
+            'all'        => (int)($row['total']      ?? 0),
+            'pending'    => (int)($row['pending']     ?? 0),
+            'processing' => (int)($row['processing']  ?? 0),
+            'shipped'    => (int)($row['shipped']     ?? 0),
+            'delivered'  => (int)($row['delivered']   ?? 0),
+            'cancelled'  => (int)($row['cancelled']   ?? 0),
+            'accepted'   => (int)($row['accepted']    ?? 0),
+        ];
+    }
+
+    /**
      * Update payment status and transaction ID.
      */
     public function updatePaymentStatus(int $orderId, string $status, ?string $transactionId = null): bool
