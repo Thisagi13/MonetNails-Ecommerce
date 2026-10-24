@@ -195,6 +195,14 @@ switch ($page) {
         $controller->index();
         break;
 
+    case 'order_history':
+    case 'my_orders':
+    case 'orders_history':
+        require_once __DIR__ . '/controllers/OrderHistoryController.php';
+        $controller = new OrderHistoryController($pdo);
+        $controller->index();
+        break;
+
     case 'logout':
     case 'signout':
         require_once __DIR__ . '/controllers/AuthController.php';

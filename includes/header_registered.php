@@ -90,7 +90,7 @@ if (empty($avatar_html)) {
             </svg>
             My Appointments
           </a>
-          <a href="<?php echo $base_url; ?>/order_history.php" class="popup-item" id="popup-orders">
+          <a href="<?php echo $base_url; ?>/index.php?page=order_history" class="popup-item" id="popup-orders">
             <!-- shopping bag icon -->
             <svg viewBox="0 0 24 24" fill="none" stroke="#A9275E" stroke-width="1.8">
               <path d="M6 8h12l-1 12H7L6 8z"/>
