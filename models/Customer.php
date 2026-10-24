@@ -59,15 +59,86 @@ class Customer
     }
 
     /**
-     * Fetch minimal session data for a newly created / logged-in customer.
+     * Fetch all profile data for a customer.
      */
     public function findById(int $id): array|false
     {
         $stmt = $this->db->prepare(
-            'SELECT customer_id, f_name, l_name, email, profile_image
+            'SELECT customer_id, f_name, l_name, email, password, phone_no, address, city, postal_code, profile_image, is_verified, created_at, updated_at
              FROM Customer WHERE customer_id = ? LIMIT 1'
         );
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+
+    /**
+     * Check if an email is already used by another customer.
+     */
+    public function emailExistsExcept(string $email, int $customerId): bool
+    {
+        $stmt = $this->db->prepare(
+            'SELECT 1 FROM Customer WHERE email = ? AND customer_id <> ? LIMIT 1'
+        );
+        $stmt->execute([$email, $customerId]);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    /**
+     * Update customer personal details and optionally profile image.
+     */
+    public function updateProfile(
+        int $customerId,
+        string $f_name,
+        string $l_name,
+        string $email,
+        string $phone = '',
+        string $address = '',
+        ?string $profile_image = null
+    ): bool {
+        if ($profile_image !== null && $profile_image !== '') {
+            $sql = 'UPDATE Customer SET
+                        f_name = ?,
+                        l_name = ?,
+                        email = ?,
+                        phone_no = ?,
+                        address = ?,
+                        profile_image = ?
+                    WHERE customer_id = ?';
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$f_name, $l_name, $email, $phone, $address, $profile_image, $customerId]);
+        } else {
+            $sql = 'UPDATE Customer SET
+                        f_name = ?,
+                        l_name = ?,
+                        email = ?,
+                        phone_no = ?,
+                        address = ?
+                    WHERE customer_id = ?';
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$f_name, $l_name, $email, $phone, $address, $customerId]);
+        }
+    }
+
+    /**
+     * Update password hash for a customer.
+     */
+    public function updatePassword(int $customerId, string $passwordHash): bool
+    {
+        $stmt = $this->db->prepare(
+            'UPDATE Customer SET password = ? WHERE customer_id = ?'
+        );
+        return $stmt->execute([$passwordHash, $customerId]);
+    }
+
+    /**
+     * Update profile image path only.
+     */
+    public function updateProfileImage(int $customerId, string $imagePath): bool
+    {
+        $stmt = $this->db->prepare(
+            'UPDATE Customer SET profile_image = ? WHERE customer_id = ?'
+        );
+        return $stmt->execute([$imagePath, $customerId]);
+    }
 }
+

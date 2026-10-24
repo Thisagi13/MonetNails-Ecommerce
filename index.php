@@ -178,6 +178,15 @@ switch ($page) {
         $controller->index();
         break;
 
+    case 'account_settings':
+    case 'account':
+    case 'profile':
+    case 'edit_profile':
+        require_once __DIR__ . '/controllers/ProfileController.php';
+        $controller = new ProfileController($pdo);
+        $controller->index();
+        break;
+
     case 'logout':
     case 'signout':
         require_once __DIR__ . '/controllers/AuthController.php';
