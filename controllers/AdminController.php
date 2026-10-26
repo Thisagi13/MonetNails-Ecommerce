@@ -750,7 +750,23 @@ class AdminController
             // Delete appointment
             if ($action === 'delete_appointment') {
                 $aptId = (int)($_POST['appointment_id'] ?? 0);
+                
+                // Fetch appointment details prior to deletion
+                $apt = $appointmentModel->getById($aptId);
+
+                // Delete appointment from DB
                 $appointmentModel->deleteAppointment($aptId);
+
+                // Notify customer via email
+                if ($apt && !empty($apt['email'])) {
+                    try {
+                        require_once __DIR__ . '/../services/MailService.php';
+                        MailService::sendAppointmentDeleted($apt['email'], $apt);
+                    } catch (\Throwable $mEx) {
+                        error_log("Failed to send appointment deleted email: " . $mEx->getMessage());
+                    }
+                }
+
                 if ($isAjax) {
                     header('Content-Type: application/json');
                     echo json_encode(['ok' => true]);

@@ -83,13 +83,13 @@
               <div class="form-row-2">
                 <div class="form-group">
                   <label for="first_name">First Name *</label>
-                  <input type="text" id="first_name" name="first_name" required
+                  <input type="text" id="first_name" style="width: 250px" name="first_name" required
                          value="<?php echo htmlspecialchars($ship['first_name']); ?>"
                          placeholder="e.g. Jane">
                 </div>
                 <div class="form-group">
                   <label for="last_name">Last Name *</label>
-                  <input type="text" id="last_name" name="last_name" required
+                  <input type="text" id="last_name" style="width: 250px" name="last_name" required
                          value="<?php echo htmlspecialchars($ship['last_name']); ?>"
                          placeholder="e.g. Doe">
                 </div>
@@ -97,21 +97,21 @@
 
               <div class="form-group">
                 <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" required
+                <input type="email" id="email" style="width: 580px" name="email" required
                        value="<?php echo htmlspecialchars($ship['email']); ?>"
                        placeholder="e.g. jane.doe@example.com">
               </div>
 
               <div class="form-group">
                 <label for="phone">Phone Number *</label>
-                <input type="tel" id="phone" name="phone" required
+                <input type="tel" id="phone" style="width: 580px" name="phone" required
                        value="<?php echo htmlspecialchars($ship['phone']); ?>"
                        placeholder="e.g. +94 77 123 4567">
               </div>
 
               <div class="form-group">
                 <label for="street_address">Street Address *</label>
-                <input type="text" id="street_address" name="street_address" required
+                <input type="text" id="street_address" style="width: 580px" name="street_address" required
                        value="<?php echo htmlspecialchars($ship['street_address']); ?>"
                        placeholder="e.g. No 90/1, 4th Lane, Werellawatta">
               </div>
@@ -119,13 +119,13 @@
               <div class="form-row-2">
                 <div class="form-group">
                   <label for="city">City *</label>
-                  <input type="text" id="city" name="city" required
+                  <input type="text" id="city" style="width: 250px" name="city" required
                          value="<?php echo htmlspecialchars($ship['city']); ?>"
                          placeholder="e.g. Yakkala">
                 </div>
                 <div class="form-group">
                   <label for="postal_code">Postal Code *</label>
-                  <input type="text" id="postal_code" name="postal_code" required
+                  <input type="text" id="postal_code" style="width: 250px" name="postal_code" required
                          value="<?php echo htmlspecialchars($ship['postal_code']); ?>"
                          placeholder="e.g. 11870">
                 </div>

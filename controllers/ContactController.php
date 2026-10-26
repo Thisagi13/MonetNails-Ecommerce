@@ -89,6 +89,15 @@ class ContactController
                     );
                     if ($saved) {
                         $sent = true;
+
+                        // Send email notification to admin
+                        try {
+                            require_once __DIR__ . '/../services/MailService.php';
+                            MailService::sendContactNotification($fields['name'], $fields['email'], $fields['subject'], $fields['message']);
+                        } catch (\Throwable $mailEx) {
+                            error_log("Failed to send contact email to admin: " . $mailEx->getMessage());
+                        }
+
                         // Clear message / subject after success; keep name/email for convenience
                         $fields['subject'] = '';
                         $fields['message'] = '';
