@@ -131,6 +131,17 @@ class Customer
     }
 
     /**
+     * Update password hash for a customer by email.
+     */
+    public function updatePasswordByEmail(string $email, string $passwordHash): bool
+    {
+        $stmt = $this->db->prepare(
+            'UPDATE Customer SET password = ? WHERE email = ?'
+        );
+        return $stmt->execute([$passwordHash, $email]);
+    }
+
+    /**
      * Update profile image path only.
      */
     public function updateProfileImage(int $customerId, string $imagePath): bool
