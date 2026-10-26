@@ -205,58 +205,8 @@ require __DIR__ . '/../../includes/header.php';
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer class="site-footer" id="site-footer">
-  <div class="footer-grid">
+<?php require __DIR__ . '/../../includes/footer.php'; ?>
 
-    <div class="footer-brand">
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" class="footer-logo" id="footer-logo">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/node-161.png" alt="Monet Nails">
-      </a>
-      <p class="brand-tagline">Artistry in every touch. Elevating nail care to a fine art.</p>
-      <p class="brand-copy">&copy; 2024 Monet Nails. Artistry in every touch.</p>
-    </div>
-
-    <div class="footer-col">
-      <h4>Explore</h4>
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=services" id="footer-services">Services</a>
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=booking" id="footer-booking">Booking</a>
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=about" id="footer-about">About Us</a>
-      <a href="privacy.php" id="footer-privacy">Privacy Policy</a>
-    </div>
-
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <div class="contact-row">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-184.svg" alt="Address icon">
-        <span>No 90/1, 4th Lane, Werellawatta, Yakkala</span>
-      </div>
-      <div class="contact-row">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-188.svg" alt="Phone icon">
-        <span>+94 77 210 5954</span>
-      </div>
-      <div class="contact-row">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-192.svg" alt="Email icon">
-        <span>hello@monetnails.com</span>
-      </div>
-    </div>
-
-    <div class="footer-col">
-      <h4>Follow Us</h4>
-      <div class="social-row">
-        <a href="#" id="social-instagram" aria-label="Instagram">
-          <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-201.svg" alt="Instagram">
-        </a>
-        <a href="#" id="social-facebook" aria-label="Facebook">
-          <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-204.svg" alt="Facebook">
-        </a>
-        <a href="#" id="social-twitter" aria-label="Twitter">
-          <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-207.svg" alt="Twitter">
-        </a>
-      </div>
-    </div>
-
-  </div>
-</footer>
 
 </body>
 </html>

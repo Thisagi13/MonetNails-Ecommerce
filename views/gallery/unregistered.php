@@ -92,56 +92,8 @@ require __DIR__ . '/../../includes/header.php';
 </main>
 
 <!-- ==================== SITE FOOTER ==================== -->
-<footer class="site-footer" id="site-footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/" class="footer-logo">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/node-161.png" alt="Monet Nails">
-      </a>
-      <p class="footer-tagline">Artistry in every touch. Elevating nail care to a fine art.</p>
-      <p class="footer-copy">&copy; 2024 Monet Nails. Artistry in every touch.</p>
-    </div>
+<?php require __DIR__ . '/../../includes/footer.php'; ?>
 
-    <div class="footer-col">
-      <h4>Explore</h4>
-      <a href="services.php">Services</a>
-      <a href="booking.php">Booking</a>
-      <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=about">About Us</a>
-      <a href="privacy.php">Privacy Policy</a>
-    </div>
-
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <div class="contact-row">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-184.svg" alt="Address">
-        <span>No 90/1, 4th Lane, Werellawatta, Yakkala</span>
-      </div>
-      <div class="contact-row">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-188.svg" alt="Phone">
-        <span>+94 77 210 5954</span>
-      </div>
-      <div class="contact-row">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-192.svg" alt="Email">
-        <span>hello@monetnails.com</span>
-      </div>
-    </div>
-
-    <div class="footer-col">
-      <h4>Follow Us</h4>
-      <div class="social-row">
-        <a href="https://tiktok.com" aria-label="TikTok">
-          <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/gallery/icon-152.svg" alt="TikTok">
-        </a>
-        <a href="https://instagram.com" aria-label="Instagram">
-          <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/gallery/icon-155.svg" alt="Instagram">
-        </a>
-        <a href="https://facebook.com" aria-label="Facebook">
-          <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/gallery/icon-158.svg" alt="Facebook">
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
 
 <!-- ==================== FILTER POP-UP MODAL ==================== -->
 <div class="filter-overlay" id="filterOverlay" onclick="closeOnOverlay(event)">

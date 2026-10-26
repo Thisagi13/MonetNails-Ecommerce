@@ -247,17 +247,8 @@ if (!function_exists('formatMoney')) {
     <!-- ============================================================
          FOOTER
          ============================================================ -->
-    <footer class="footer" style="background-color: #F0EDED; border-top: 1px solid #E5E7EB; padding: 48px 24px;">
-        <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="<?php echo $base_url; ?>/assets/images/home/node-210.png" alt="Monet Nails" style="height: 36px; width: auto;">
-                <span style="font-family: var(--mn-serif); font-size: 18px; color: var(--mn-dark); font-weight: 600;">Monet Nails Atelier</span>
-            </div>
-            <p style="font-size: 13px; color: #574147; margin: 0;">
-                &copy; <?php echo date('Y'); ?> Monet Nails Bar. All rights reserved. Artistry in every touch.
-            </p>
-        </div>
-    </footer>
+    <?php require __DIR__ . '/../../includes/footer.php'; ?>
+
 
 </body>
 </html>

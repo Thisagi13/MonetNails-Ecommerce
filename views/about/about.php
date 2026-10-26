@@ -204,64 +204,8 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
     <!-- ============================================================
          SITE FOOTER
          ============================================================ -->
-    <footer class="about-footer">
-        <div class="about-footer-inner">
+    <?php require __DIR__ . '/../../includes/footer.php'; ?>
 
-            <div class="footer-brand">
-                <div class="footer-brand-title">Monet Nails</div>
-                <p>Artistry in every touch. Elevating nail care to a fine art.</p>
-                <p class="copyright">&copy; <?php echo date('Y'); ?> Monet Nails. All rights reserved.</p>
-            </div>
-
-            <div class="footer-col">
-                <h4>Explore</h4>
-                <a href="<?php echo $base_url; ?>/">Home</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=services">Services</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=booking">Booking</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=gallery">Gallery</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=contact">Contact</a>
-            </div>
-
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <div class="contact-item">
-                    <!-- Location icon -->
-                    <svg viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.66667 5.83333C4.9875 5.83333 5.26215 5.7191 5.49062 5.49062C5.7191 5.26215 5.83333 4.9875 5.83333 4.66667C5.83333 4.34583 5.7191 4.07118 5.49062 3.84271C5.26215 3.61424 4.9875 3.5 4.66667 3.5C4.34583 3.5 4.07118 3.61424 3.84271 3.84271C3.61424 4.07118 3.5 4.34583 3.5 4.66667C3.5 4.9875 3.61424 5.26215 3.84271 5.49062C4.07118 5.7191 4.34583 5.83333 4.66667 5.83333ZM4.66667 10.1208C5.85278 9.03194 6.73264 8.04271 7.30625 7.15312C7.87986 6.26354 8.16667 5.47361 8.16667 4.78333C8.16667 3.72361 7.82882 2.8559 7.15312 2.18021C6.47743 1.50451 5.64861 1.16667 4.66667 1.16667C3.68472 1.16667 2.8559 1.50451 2.18021 2.18021C1.50451 2.8559 1.16667 3.72361 1.16667 4.78333C1.16667 5.47361 1.45347 6.26354 2.02708 7.15312C2.60069 8.04271 3.48056 9.03194 4.66667 10.1208ZM4.66667 11.6667C3.10139 10.3347 1.93229 9.09757 1.15937 7.95521C0.386458 6.81285 0 5.75556 0 4.78333C0 3.325 0.469097 2.16319 1.40729 1.29792C2.34549 0.432639 3.43194 0 4.66667 0C5.90139 0 6.98785 0.432639 7.92604 1.29792C8.86424 2.16319 9.33333 3.325 9.33333 4.78333C9.33333 5.75556 8.94688 6.81285 8.17396 7.95521C7.40104 9.09757 6.23194 10.3347 4.66667 11.6667Z" fill="currentColor"/>
-                    </svg>
-                    <span>No 90/1, 4th Lane, Werellawatta, Yakkala</span>
-                </div>
-                <div class="contact-item">
-                    <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.8875 10.5C8.67222 10.5 7.47153 10.2351 6.28542 9.70521C5.09931 9.17535 4.02014 8.4243 3.04792 7.45208C2.07569 6.47986 1.32465 5.40069 0.794792 4.21458C0.264931 3.02847 0 1.82778 0 0.6125C0 0.4375 0.0583333 0.291667 0.175 0.175C0.291667 0.0583333 0.4375 0 0.6125 0H2.975C3.11111 0 3.23264 0.0461806 3.33958 0.138542C3.44653 0.230903 3.50972 0.340278 3.52917 0.466667L3.90833 2.50833C3.92778 2.66389 3.92292 2.79514 3.89375 2.90208C3.86458 3.00903 3.81111 3.10139 3.73333 3.17917L2.31875 4.60833C2.51319 4.96806 2.7441 5.31562 3.01146 5.65104C3.27882 5.98646 3.57292 6.30972 3.89375 6.62083C4.19514 6.92222 4.51111 7.20174 4.84167 7.45937C5.17222 7.71701 5.52222 7.95278 5.89167 8.16667L7.2625 6.79583C7.35 6.70833 7.46424 6.64271 7.60521 6.59896C7.74618 6.55521 7.88472 6.54306 8.02083 6.5625L10.0333 6.97083C10.1694 7.00972 10.2812 7.08021 10.3687 7.18229C10.4562 7.28437 10.5 7.39861 10.5 7.525V9.8875C10.5 10.0625 10.4417 10.2083 10.325 10.325C10.2083 10.4417 10.0625 10.5 9.8875 10.5Z" fill="currentColor"/>
-                    </svg>
-                    <span>+94 77 210 5954</span>
-                </div>
-                <div class="contact-item">
-                    <svg viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1.16667 9.33333C0.845833 9.33333 0.571181 9.2191 0.342708 8.99063C0.114236 8.76215 0 8.4875 0 8.16667V1.16667C0 0.845833 0.114236 0.571181 0.342708 0.342708C0.571181 0.114236 0.845833 0 1.16667 0H10.5C10.8208 0 11.0955 0.114236 11.324 0.342708C11.5524 0.571181 11.6667 0.845833 11.6667 1.16667V8.16667C11.6667 8.4875 11.5524 8.76215 11.324 8.99063C11.0955 9.2191 10.8208 9.33333 10.5 9.33333H1.16667ZM5.83333 5.25L1.16667 2.33333V8.16667H10.5V2.33333L5.83333 5.25ZM5.83333 4.08333L10.5 1.16667H1.16667L5.83333 4.08333Z" fill="currentColor"/>
-                    </svg>
-                    <span>hello@monetnails.com</span>
-                </div>
-            </div>
-
-            <div class="footer-col">
-                <h4>Follow Us</h4>
-                <div class="social-row" style="display:flex; gap:16px;">
-                    <a href="#" aria-label="TikTok" id="linkAboutTikTok" style="display:flex; justify-content:center; align-items:center; width:44px; height:44px; border:1px solid rgba(221,191,198,0.5); border-radius:12px; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-152.svg" alt="TikTok" style="width:22px; height:22px;">
-                    </a>
-                    <a href="#" aria-label="Instagram" id="linkAboutInstagram" style="display:flex; justify-content:center; align-items:center; width:44px; height:44px; border:1px solid rgba(221,191,198,0.5); border-radius:12px; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-155.svg" alt="Instagram" style="width:22px; height:22px;">
-                    </a>
-                    <a href="#" aria-label="Facebook" id="linkAboutFacebook" style="display:flex; justify-content:center; align-items:center; width:44px; height:44px; border:1px solid rgba(221,191,198,0.5); border-radius:12px; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-158.svg" alt="Facebook" style="width:22px; height:22px;">
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </footer>
 
 </body>
 </html>

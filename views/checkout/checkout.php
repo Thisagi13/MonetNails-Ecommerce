@@ -337,29 +337,8 @@
   </script>
 
   <!-- ==================== SITE FOOTER ==================== -->
-  <footer class="site-footer">
-    <div class="checkout-container footer-inner">
-      <div class="footer-brand">
-        <div class="footer-brand-title">Monet Nails</div>
-        <p class="footer-tagline">Artistry in every touch. Elevating handcrafted nail wellness to a fine art.</p>
-        <p class="footer-copy">&copy; <?php echo date('Y'); ?> Monet Nails. All rights reserved.</p>
-      </div>
+  <?php require __DIR__ . '/../../includes/footer.php'; ?>
 
-      <div class="footer-col">
-        <h3>Explore</h3>
-        <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/">Home</a>
-        <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=gallery">Gallery</a>
-        <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=cart">Shopping Cart</a>
-      </div>
-
-      <div class="footer-col">
-        <h3>Customer Care</h3>
-        <p>No 90/1, 4th Lane, Werellawatta, Yakkala</p>
-        <p>+94 77 210 5954</p>
-        <p>hello@monetnails.com</p>
-      </div>
-    </div>
-  </footer>
 
 </body>
 </html>

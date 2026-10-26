@@ -213,70 +213,8 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
     <!-- ============================================================
          SITE FOOTER
          ============================================================ -->
-    <footer class="site-footer" id="site-footer" style="background:#F0EDED; border-top:1px solid #E5E7EB; padding:70px 24px 40px;">
-        <div style="max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between;">
+    <?php require __DIR__ . '/../../includes/footer.php'; ?>
 
-            <!-- Column 1: Brand -->
-            <div style="flex:1.2; min-width:240px;">
-                <a href="<?php echo $base_url; ?>/" style="display:inline-block; text-decoration:none;">
-                    <img src="<?php echo $base_url; ?>/assets/images/home/node-161.png" alt="Monet Nails logo" style="width:46px; opacity:0.85;">
-                </a>
-                <p style="margin-top:18px; max-width:280px; font-size:15px; line-height:1.6; color:#574147;">
-                    Artistry in every touch. Elevating nail care to a fine art.
-                </p>
-                <p style="margin-top:16px; font-size:13px; color:#8C7C83;">
-                    &copy; <?php echo date('Y'); ?> Monet Nails. All rights reserved.
-                </p>
-            </div>
-
-            <!-- Column 2: Explore -->
-            <div style="flex:1; min-width:160px;">
-                <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Explore</h4>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <a href="<?php echo $base_url; ?>/index.php?page=services" style="color:#574147; text-decoration:none; font-size:15px;">Services</a>
-                    <a href="<?php echo $base_url; ?>/booking.php" style="color:#574147; text-decoration:none; font-size:15px;">Booking</a>
-                    <a href="<?php echo $base_url; ?>/index.php?page=about" style="color:#574147; text-decoration:none; font-size:15px;">About Us</a>
-                    <a href="<?php echo $base_url; ?>/privacy.php" style="color:#574147; text-decoration:none; font-size:15px;">Privacy Policy</a>
-                </div>
-            </div>
-
-            <!-- Column 3: Contact -->
-            <div style="flex:1.2; min-width:220px;">
-                <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Contact</h4>
-                <div style="display:flex; flex-direction:column; gap:12px; font-size:15px; color:#574147;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/icon-184.svg" alt="" style="width:14px;">
-                        <span>No 90/1, 4th Lane, Werellawatta, Yakkala</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/icon-188.svg" alt="" style="width:14px;">
-                        <span>+94 77 210 5954</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/icon-192.svg" alt="" style="width:14px;">
-                        <span>hello@monetnails.com</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Column 4: Follow Us -->
-            <div style="flex:1; min-width:180px;">
-                <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Follow Us</h4>
-                <div style="display:flex; gap:12px;">
-                    <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-152.svg" alt="TikTok" style="max-height:16px;">
-                    </a>
-                    <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-155.svg" alt="Instagram" style="max-height:16px;">
-                    </a>
-                    <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-158.svg" alt="Facebook" style="max-height:16px;">
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </footer>
 
 </body>
 </html>
