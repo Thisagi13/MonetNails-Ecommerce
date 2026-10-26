@@ -47,8 +47,9 @@ if (!function_exists('adm_srv_icon')) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Stylesheet -->
+    <!-- Stylesheets (shared sidebar must load after the page stylesheet) -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/admin_services.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/admin_sidebar.css">
 
     <style>
     /* Critical Modal Guarantee Styles */
@@ -89,48 +90,14 @@ if (!function_exists('adm_srv_icon')) {
     }
     </style>
 </head>
-<body class="admin-services-body">
+<body class="admin-body">
 
-<div class="dashboard">
+<div class="page">
 
     <!-- ====================================================================
          LEFT SIDEBAR
          ==================================================================== -->
-    <aside class="sidebar">
-
-        <!-- Brand logo block -->
-        <div class="brand-block">
-            <a href="<?php echo $base_url; ?>/index.php?page=admin" class="brand-row">
-                <span class="brand-dot"></span>
-                <span class="brand-name"><?php echo htmlspecialchars($brand['name']); ?></span>
-            </a>
-            <span class="brand-subtitle"><?php echo htmlspecialchars($brand['subtitle']); ?></span>
-        </div>
-
-        <!-- Navigation Menu -->
-        <nav class="nav-menu">
-            <?php foreach ($nav_items as $item): ?>
-                <a href="<?php echo htmlspecialchars($item['url']); ?>" class="nav-item <?php echo !empty($item['active']) ? 'active' : ''; ?>">
-                    <span class="nav-icon"><?php echo adm_srv_icon($item['icon']); ?></span>
-                    <span><?php echo htmlspecialchars($item['label']); ?></span>
-                </a>
-            <?php endforeach; ?>
-        </nav>
-
-        <!-- Curation Tip Card -->
-        <div class="tip-card">
-            <div class="tip-header">
-                <?php echo adm_srv_icon('info'); ?>
-                <span class="tip-label"><?php echo htmlspecialchars($curation_tip['label']); ?></span>
-            </div>
-            <p class="tip-text"><?php echo htmlspecialchars($curation_tip['text']); ?></p>
-            <div class="tip-footer">
-                <span class="guard-label"><?php echo htmlspecialchars($curation_tip['guard_label']); ?></span>
-                <span class="guard-status"><?php echo htmlspecialchars($curation_tip['guard_status']); ?></span>
-            </div>
-        </div>
-
-    </aside>
+    <?php $activePage = 'admin_services'; include __DIR__ . '/../../includes/admin_sidebar.php'; ?>
 
     <!-- ====================================================================
          RIGHT WORKSPACE

@@ -33,6 +33,7 @@ function getOrderStatusClass(string $status): string {
 
     <!-- Admin Orders Stylesheet -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/admin_orders.css">
+    <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/admin_sidebar.css">
 
     <!-- Critical inline CSS: guarantees modal & action buttons render correctly -->
     <style>
@@ -237,95 +238,16 @@ function getOrderStatusClass(string $status): string {
 <div class="page">
 
     <!-- ============== 1. SIDEBAR ============== -->
-    <aside class="sidebar">
-        <div>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin" class="brand-row" style="text-decoration:none;">
-                <span class="brand-dot"></span>
-                <span class="brand-name">Monet Atelier</span>
-            </a>
-            <div class="brand-sub">NAIL BAR &amp; PRESS-ON STUDIO</div>
-        </div>
-
-        <nav class="nav">
-            <a href="<?php echo $base_url; ?>/index.php?page=admin" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_orders" class="nav-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span>Orders &amp; Queue</span>
-            </a>
-
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_products" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-                <span>Products Catalog</span>
-            </a>
-
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_appointments" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                <span>Appointments</span>
-            </a>
-
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_services" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                <span>Services</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_reports" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                </svg>
-                <span>Sales &amp; Reports</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-bottom">
-            <div class="tip-card">
-                <div class="tip-head">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span>Fulfillment Guard</span>
-                </div>
-                <p class="tip-text">Dispatched orders should have tracking numbers attached to keep clients informed.</p>
-                <a href="<?php echo $base_url; ?>/index.php?page=home" target="_blank" class="tip-link">
-                    <span>Storefront View</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                </a>
-            </div>
-
-            <div class="system-status">
-                <span><span class="status-dot"></span>Queue Live</span>
-                <span>Active</span>
-            </div>
-        </div>
-    </aside>
+    <?php
+    $activePage = 'admin_orders';
+    $sidebarTip = [
+        'label'  => 'FULFILLMENT GUARD',
+        'text'   => 'Dispatched orders should have tracking numbers attached to keep clients informed.',
+        'guard'  => 'Queue Live',
+        'status' => 'Active',
+    ];
+    include __DIR__ . '/../../includes/admin_sidebar.php';
+    ?>
 
     <!-- ============== 2. ORDERS WORKSPACE (MIDDLE) ============== -->
     <main class="orders-col">

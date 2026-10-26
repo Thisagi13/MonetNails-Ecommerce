@@ -17,182 +17,22 @@
     --sidebar-bg:  #2A2024;   /* curation tip card bg (dark) */
     --page-bg:     #FCFAFB;   /* search input bg, subtle cards - rgb(252,250,251) */
     --border:      #F0E6E9;   /* all borders - rgb(240,230,233) */
+    --ink:         #2A2024;   /* shared admin palette (body/sidebar base) */
+    --muted:       #8C7C83;
+    --bg:          #FAF7F5;
     --white:       #FFFFFF;
     --font-heading: 'Cormorant Garamond', Georgia, serif;
     --font-sans:    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
 
-body.admin-services-body {
-    width: 100%;
-    min-height: 100vh;
-    overflow-x: hidden;
-    font-family: var(--font-sans);
-    color: var(--dark);
-    background: #FFFFFF;
-}
+/* body base now provided by assets/css/admin_sidebar.css (body.admin-body) */
 
 img { max-width: 100%; height: auto; display: block; }
 a   { text-decoration: none; color: inherit; }
 button { font-family: inherit; cursor: pointer; }
 
-/* --- PAGE CONTAINER (SIDEBAR + WORKSPACE) --- */
-.dashboard {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    min-height: 100vh;
-}
-
-/* =========================================================================
-   SIDEBAR
-   ========================================================================= */
-.sidebar {
-    flex: 0 0 260px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: var(--white);
-    border-right: 1px solid var(--border);
-    padding: 24px;
-    min-height: 100vh;
-}
-
-/* Brand block */
-.brand-block {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 32px;
-}
-.brand-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-}
-.brand-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-    display: inline-block;
-    flex-shrink: 0;
-}
-.brand-name {
-    font-family: var(--font-heading);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--dark-2);
-    letter-spacing: -0.2px;
-}
-.brand-subtitle {
-    font-size: 9px;
-    letter-spacing: 0.14em;
-    color: var(--grey);
-    text-transform: uppercase;
-    font-weight: 600;
-    padding-left: 19px;
-}
-
-/* Nav Menu */
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: auto;
-}
-.nav-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--grey);
-    transition: all 0.2s ease;
-}
-.nav-item:hover {
-    background: var(--page-bg);
-    color: var(--dark);
-}
-.nav-item.active {
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: 600;
-}
-.nav-item svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-}
-.nav-item:hover svg {
-    transform: scale(1.08);
-}
-.nav-item.active svg path,
-.nav-item.active svg rect,
-.nav-item.active svg line,
-.nav-item.active svg circle {
-    stroke: var(--accent);
-}
-
-/* Curation Tip Card */
-.tip-card {
-    background: var(--sidebar-bg);
-    border-radius: 12px;
-    padding: 16px;
-    color: var(--white);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 24px;
-    box-shadow: 0 4px 14px rgba(42, 32, 36, 0.08);
-}
-.tip-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-}
-.tip-header svg {
-    width: 13px;
-    height: 13px;
-    flex-shrink: 0;
-}
-.tip-label {
-    font-size: 9.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.7);
-}
-.tip-text {
-    font-size: 11.5px;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.88);
-}
-.tip-footer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    font-size: 11px;
-}
-.guard-label {
-    color: rgba(255, 255, 255, 0.6);
-}
-.guard-status {
-    background: rgba(255, 255, 255, 0.14);
-    padding: 3px 8px;
-    border-radius: 9999px;
-    font-size: 10px;
-    font-weight: 600;
-    color: #FFFFFF;
-}
+/* Page container + sidebar styles now live in assets/css/admin_sidebar.css
+   (shared by every admin page). */
 
 /* =========================================================================
    RIGHT WORKSPACE
@@ -860,8 +700,6 @@ button { font-family: inherit; cursor: pointer; }
    RESPONSIVE
    ========================================================================= */
 @media (max-width: 1024px) {
-    .dashboard { flex-direction: column; }
-    .sidebar { flex: 0 0 auto; width: 100%; min-height: auto; border-right: none; border-bottom: 1px solid var(--border); }
     .workspace { padding: 24px 20px; }
     .table-head, .service-row { grid-template-columns: 2fr 1fr 1fr 1fr 1fr; font-size: 12px; padding: 14px 16px; }
 }

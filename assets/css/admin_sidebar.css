@@ -1,0 +1,138 @@
+/* =========================================================
+   assets/css/admin_sidebar.css — Shared Admin Side Navigation
+   Monet Atelier Admin (Monet Nails MVC)
+
+   Single source of truth for the admin sidebar. Extracted from
+   the admin dashboard so every admin page renders an identical
+   side navigation bar. Include it AFTER the page's own
+   stylesheet:
+
+   <link rel="stylesheet" href=".../assets/css/admin_sidebar.css">
+   ========================================================= */
+
+/* ---- Base (body + page layout) ---- */
+body.admin-body {
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.page { display: flex; min-height: 100vh; }
+
+/* ===================== SIDEBAR ===================== */
+/* The dashboard palette is scoped to .sidebar so the sidebar
+   looks identical on every admin page, even when the page's
+   own stylesheet defines slightly different values. */
+.sidebar {
+    --ink:       #2A2024;
+    --muted:     #8C7C83;
+    --rose:      #BE536D;
+    --rose-soft: #E28EA2;
+    --rose-bg:   #F9ECEF;
+    --rose-bg2:  #F0CED7;
+    --line:      #F0E6E9;
+    --white:     #FFFFFF;
+
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--line);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 24px;
+}
+
+.brand-row { display: flex; align-items: center; gap: 8px; }
+.brand-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rose-soft); }
+.brand-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.14px;
+}
+
+.brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    margin-left: 18px;
+    letter-spacing: 0.5px;
+}
+
+.nav { display: flex; flex-direction: column; gap: 6px; }
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+    background: #FAF3F5;
+    color: var(--rose);
+}
+
+.nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.nav-item.active {
+    background: var(--rose-bg);
+    color: var(--rose);
+    font-weight: 600;
+}
+
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--rose);
+    border-radius: 50%;
+}
+
+.tip-card {
+    margin-top: auto;
+    background: linear-gradient(180deg, #EEB7C4 0%, #D56E87 100%);
+    color: var(--white);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.tip-head { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; }
+.tip-head svg { width: 13px; height: 13px; }
+.tip-text {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 18px;
+    color: rgba(255,255,255,0.95);
+}
+.tip-foot {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+}
+
+/* ---- Responsive (sidebar) ---- */
+@media (max-width: 768px) {
+    .page { flex-direction: column; }
+    .sidebar { width: 100%; }
+    .nav { flex-direction: row; flex-wrap: wrap; }
+    .tip-card { margin-top: 16px; }
+}

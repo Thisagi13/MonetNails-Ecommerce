@@ -28,64 +28,21 @@ function aplink(string $base, array $extra = []): string {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/admin_products.css">
+    <link rel="stylesheet" href="<?php echo $base_url; ?>/assets/css/admin_sidebar.css">
 </head>
 <body class="admin-body">
 <div class="page">
     <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin" class="brand-row">
-                <span class="brand-dot"></span>
-                <span class="brand-name">Monet Atelier</span>
-            </a>
-            <div class="brand-sub">Nail Bar &amp; Press-On Studio</div>
-        </div>
-
-        <nav class="nav">
-            <a href="<?php echo $base_url; ?>/index.php?page=admin" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_orders" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 L3 6 L3 20 a2 2 0 0 0 2 2 h14 a2 2 0 0 0 2 -2 V6 L18 2 Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10 a4 4 0 0 1 -8 0"/></svg>
-                <span>Orders &amp; Queue</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_products" class="nav-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 L12 3 L3 8 V16 L12 21 L21 16 Z"/><line x1="3" y1="8" x2="12" y2="13"/><line x1="21" y1="8" x2="12" y2="13"/><line x1="12" y1="13" x2="12" y2="21"/></svg>
-                <span>Products &amp; Stock</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_appointments" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <span>Appointments</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_services" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                <span>Services</span>
-            </a>
-            <a href="<?php echo $base_url; ?>/index.php?page=admin_reports" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="20" x2="18" y2="10"/>
-                    <line x1="12" y1="20" x2="12" y2="4"/>
-                    <line x1="6" y1="20" x2="6" y2="14"/>
-                </svg>
-                <span>Sales &amp; Reports</span>
-            </a>
-        </nav>
-
-        <div class="tip-card">
-            <div class="tip-head">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>Curation Tip</span>
-            </div>
-            <p class="tip-text">Keep safety stock at 5 units or above for featured sets to avoid customer checkout lockouts during promotions.</p>
-            <div class="tip-foot">
-                <span>Inventory Guard</span>
-                <span class="tip-badge">Active</span>
-            </div>
-        </div>
-    </aside>
+    <?php
+    $activePage = 'admin_products';
+    $sidebarTip = [
+        'label'  => 'CURATION TIP',
+        'text'   => 'Keep safety stock at 5 units or above for featured sets to avoid customer checkout lockouts during promotions.',
+        'guard'  => 'Inventory Guard',
+        'status' => 'Active',
+    ];
+    include __DIR__ . '/../../includes/admin_sidebar.php';
+    ?>
 
     <!-- MAIN WORKSPACE -->
     <main class="workspace">
