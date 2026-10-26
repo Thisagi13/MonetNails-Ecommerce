@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Home stylesheet (MVC: assets/css/home.css) -->
-  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/home.css">
+  <link rel="stylesheet" href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/css/home.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
@@ -73,9 +73,23 @@ require __DIR__ . '/../../includes/header.php';
 
   <div class="curated-grid">
 
-    <!-- Card 1: Pedicure (text only) -->
-    <article class="exp-card" id="card-pedicure">
-      <div>
+    <!-- Card 1: Signature Manicure (wide: text on left, image on right) -->
+    <article class="exp-card card-manicure-wide" id="card-manicure">
+      <div class="card-content">
+        <span class="card-tag">Signature</span>
+        <h3>Signature Manicure</h3>
+        <p>A comprehensive treatment focusing on cuticle care, nail
+           shaping, and a flawless application of premium lacquer,
+           finished with a relaxing hand massage.</p>
+      </div>
+      <div class="card-image-wrap">
+        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/image-54.png" alt="Signature Manicure">
+      </div>
+    </article>
+
+    <!-- Card 2: Botanical Spa Pedicure (text only) -->
+    <article class="exp-card card-pedicure" id="card-pedicure">
+      <div class="card-content">
         <span class="card-tag">Pedicure</span>
         <h3>Botanical Spa Pedicure</h3>
         <p>Rejuvenate tired feet with our botanical soak,
@@ -84,24 +98,10 @@ require __DIR__ . '/../../includes/header.php';
       </div>
     </article>
 
-    <!-- Card 2: Manicure (with faded image watermark on top) -->
-    <article class="exp-card card-with-image" id="card-manicure">
-      <div class="card-img-bg">
-        <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/image-54.png" alt="">
-      </div>
-      <div>
-        <span class="card-tag">Manicure</span>
-        <h3>Signature Manicure</h3>
-        <p>A comprehensive treatment focusing on cuticle care, nail
-           shaping, and a flawless application of premium lacquer,
-           finished with a relaxing hand massage.</p>
-      </div>
-    </article>
-
-    <!-- Card 3: Nail Art (text + image split) -->
-    <article class="exp-card card-split" id="card-nailart">
+    <!-- Card 3: Bespoke Nail Art & Styles (split row: text on left, image on right) -->
+    <article class="card-split" id="card-nailart">
       <div class="card-text">
-        <span class="card-tag">Nail Art</span>
+        <span class="card-tag">Artistry</span>
         <h3>Bespoke Nail Art &amp; Styles</h3>
         <p>Express your unique personality with our custom nail art. From
            minimalist line work to intricate hand-painted designs and 3D
@@ -117,12 +117,12 @@ require __DIR__ . '/../../includes/header.php';
 
 <!-- ============ WELCOME OFFER ============ -->
 <section class="welcome-offer" id="welcome-offer">
-  <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/icon-75.svg" alt="" class="welcome-icon">
-  <h2>Exclusive Welcome Offer</h2>
-  <div class="discount">20% OFF Your First Visit</div>
-  <p>Embrace the art of self-care. Book your initial consultation and treatment
+  <img src="/MonetNails-Ecommerce2/MonetNails-Ecommerce/assets/images/home/GalleryIcon.jpg" alt="" class="welcome-icon" style="opacity: 1 !important;">
+  <h2>Treat your fingertips</h2>
+  <div class="discount">Explore our latest collection</div>
+  <p>Embrace the art of self-care. Order your Nail collection and treatment
      today to experience the Monet Nails difference.</p>
-  <a href="index.php?page=signup" class="btn-dark" id="claim-offer-btn">Claim Offer</a>
+  <a href="/MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=gallery" class="btn-dark" id="claim-offer-btn">View Gallery</a>
 </section>
 
 <!-- ============ ABOUT US ============ -->

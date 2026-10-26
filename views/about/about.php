@@ -90,7 +90,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
 
             <!-- Founder portrait -->
             <div class="founder-img-wrap">
-                <img src="<?php echo $base_url; ?>/leha.jpeg"
+                <img src="<?php echo $base_url; ?>/assets/images/about/leha.jpeg"
                      alt="m.L.L.Methnara — Founder of Monet Nails">
             </div>
 
