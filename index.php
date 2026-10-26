@@ -161,6 +161,33 @@ switch ($page) {
         $controller->signin();
         break;
 
+    case 'forgot_password':
+    case 'forgot-password':
+    case 'forgot':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require_once __DIR__ . '/controllers/PasswordResetController.php';
+            $controller = new PasswordResetController($pdo);
+            $controller->requestReset();
+        } else {
+            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&forgot=1');
+            exit;
+        }
+        break;
+
+    case 'forgot_password_request':
+        require_once __DIR__ . '/controllers/PasswordResetController.php';
+        $controller = new PasswordResetController($pdo);
+        $controller->requestReset();
+        break;
+
+    case 'reset_password':
+    case 'reset-password':
+    case 'resetpassword':
+        require_once __DIR__ . '/controllers/PasswordResetController.php';
+        $controller = new PasswordResetController($pdo);
+        $controller->resetPassword();
+        break;
+
     case 'signup':
     case 'register':
         if (isset($_SESSION['customer_id'])) {
