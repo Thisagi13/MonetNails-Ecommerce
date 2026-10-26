@@ -501,6 +501,46 @@ HTML;
     }
 
     /**
+     * 6. Send Password Reset Link Email
+     */
+    public static function sendPasswordResetLink(string $toEmail, string $customerName, string $resetLink): bool
+    {
+        $name = trim($customerName) !== '' ? htmlspecialchars($customerName) : 'Valued Patron';
+        $subject = 'Password Reset Request — Monet Nails Atelier';
+
+        $bodyContent = <<<HTML
+        <p style="font-size:16px;line-height:1.6;color:#332629;margin:0 0 16px;">
+          Dear <strong>{$name}</strong>,
+        </p>
+        <p style="font-size:15px;line-height:1.6;color:#574147;margin:0 0 20px;">
+          We received a request to reset your password for your <strong>Monet Nails Atelier</strong> account.
+        </p>
+        
+        <div style="background:#FAF6F5;border-left:4px solid #A9275E;border-radius:4px;padding:18px 20px;margin-bottom:28px;">
+          <h4 style="margin:0 0 8px;color:#A9275E;font-size:15px;font-family:Georgia,serif;">Security Notice</h4>
+          <p style="margin:0;color:#574147;font-size:14px;line-height:1.6;">
+            This password reset link will expire in <strong>1 hour</strong>. If you did not initiate this request, no action is needed — your account remains completely safe and secure.
+          </p>
+        </div>
+
+        <div style="text-align:center;margin:32px 0;">
+          <a href="{$resetLink}"
+             style="background:#A9275E;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:14px;letter-spacing:0.06em;padding:14px 34px;border-radius:4px;display:inline-block;box-shadow:0 4px 14px rgba(169,39,94,0.25);">
+            RESET YOUR PASSWORD
+          </a>
+        </div>
+
+        <p style="font-size:13px;line-height:1.6;color:#8A757A;margin:28px 0 0;word-break:break-all;">
+          If the button above does not work, copy and paste this link into your browser:<br>
+          <a href="{$resetLink}" style="color:#A9275E;text-decoration:underline;">{$resetLink}</a>
+        </p>
+HTML;
+
+        $html = self::wrapTemplate('Reset Your Password', 'Monet Nails Password Reset Request', $bodyContent);
+        return self::send($toEmail, $subject, $html);
+    }
+
+    /**
      * Master responsive branded HTML layout wrapper.
      */
     private static function wrapTemplate(string $headerTitle, string $preheader, string $contentHtml): string
