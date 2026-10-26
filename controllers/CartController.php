@@ -55,6 +55,41 @@ class CartController
                 $this->cartModel->updateQuantity($cartId, $qty, $userId, $sessionKey);
             }
 
+            $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+                   || (isset($_POST['ajax']) && $_POST['ajax'] == '1');
+
+            if ($isAjax) {
+                $cartItems = $this->cartModel->getItems($userId, $sessionKey);
+                $shippingFee = 150.00;
+                $subtotal    = 0.0;
+                $updatedItemTotal = 0.0;
+                foreach ($cartItems as $item) {
+                    $itemTotal = (float)$item['price'] * (int)$item['quantity'];
+                    $subtotal += $itemTotal;
+                    if ((int)$item['cart_id'] === $cartId) {
+                        $updatedItemTotal = $itemTotal;
+                    }
+                }
+                $totalDue = $subtotal + ($subtotal > 0 ? $shippingFee : 0);
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success'              => true,
+                    'cart_id'              => $cartId,
+                    'quantity'             => $qty ?? 1,
+                    'item_total'           => $updatedItemTotal,
+                    'item_total_formatted' => 'Rs.' . (fmod($updatedItemTotal, 1.0) == 0 ? number_format($updatedItemTotal, 0) : number_format($updatedItemTotal, 2, '.', '')),
+                    'subtotal'             => $subtotal,
+                    'subtotal_formatted'   => 'Rs.' . (fmod($subtotal, 1.0) == 0 ? number_format($subtotal, 0) : number_format($subtotal, 2, '.', '')),
+                    'shipping'             => $shippingFee,
+                    'shipping_formatted'   => 'Rs.' . (fmod($shippingFee, 1.0) == 0 ? number_format($shippingFee, 0) : number_format($shippingFee, 2, '.', '')),
+                    'total_due'            => $totalDue,
+                    'total_due_formatted'  => 'Rs.' . (fmod($totalDue, 1.0) == 0 ? number_format($totalDue, 0) : number_format($totalDue, 2, '.', '')),
+                    'item_count'           => count($cartItems)
+                ]);
+                exit;
+            }
+
             // Redirect to prevent form re-submission on refresh
             header('Location: index.php?page=cart');
             exit;

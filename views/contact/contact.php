@@ -252,55 +252,8 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
     <!-- ============================================================
          SITE FOOTER
          ============================================================ -->
-    <footer class="contact-footer">
-        <div class="contact-footer-inner">
+    <?php require __DIR__ . '/../../includes/footer.php'; ?>
 
-            <div class="footer-brand">
-                <div class="footer-brand-title">Monet Nails</div>
-                <p class="footer-tagline">Artistry in every touch. Elevating nail care to a fine art.</p>
-                <p class="footer-copy">&copy; <?php echo date('Y'); ?> Monet Nails. All rights reserved.</p>
-            </div>
-
-            <div class="footer-col">
-                <h3>Explore</h3>
-                <a href="<?php echo $base_url; ?>/">Home</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=services">Services</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=booking">Booking</a>
-                <a href="<?php echo $base_url; ?>/index.php?page=gallery">Gallery</a>
-            </div>
-
-            <div class="footer-col">
-                <h3>Contact</h3>
-                <p>No 90/1, 4th Lane, Werellawatta, Yakkala</p>
-                <p>+94 77 210 5954</p>
-                <p>hello@monetnails.com</p>
-            </div>
-
-            <div class="footer-col">
-                <h3>Follow Us</h3>
-                <div class="social-row">
-                    <a href="#" class="social-btn" aria-label="Instagram" id="linkInstagram">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
-                    </a>
-                    <a href="#" class="social-btn" aria-label="Facebook" id="linkFacebook">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                        </svg>
-                    </a>
-                    <a href="#" class="social-btn" aria-label="Twitter/X" id="linkTwitter">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </footer>
 
     <!-- ============================================================
          CLIENT-SIDE FORM VALIDATION

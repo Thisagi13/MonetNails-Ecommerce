@@ -1,6 +1,6 @@
 <?php
 /**
- * views/booking/booking.php — Appointment & Salon Booking View
+ * views/booking/booking.php â€” Appointment & Salon Booking View
  * Monet Nails MVC Application
  *
  * Provides a booking workflow for treatments and nail art.
@@ -21,7 +21,7 @@ $first_main_done = false;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserve Your Appointment — Monet Nails Atelier</title>
+    <title>Reserve Your Appointment â€” Monet Nails Atelier</title>
     <meta name="description" content="Book your bespoke manicure, pedicure, or signature nail art appointment at Monet Nails.">
 
     <!-- Fonts: Bodoni Moda (headings) + Manrope (body) -->
@@ -380,7 +380,7 @@ $first_main_done = false;
                         // Launch PayHere popup
                         payhere.startPayment(payment);
                     } else {
-                        // JS SDK blocked — direct form POST
+                        // JS SDK blocked â€” direct form POST
                         document.getElementById('payhereDirectForm').submit();
                     }
                 });
@@ -390,66 +390,8 @@ $first_main_done = false;
         </main>
 
         <!-- Site Footer -->
-        <footer class="site-footer" id="site-footer" style="background:#F0EDED; border-top:1px solid #E5E7EB; padding:70px 24px 40px;">
-            <div style="max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between;">
-                <div style="flex:1.2; min-width:240px;">
-                    <a href="<?php echo $base_url; ?>/" style="display:inline-block; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/node-161.png" alt="Monet Nails logo" style="width:46px; opacity:0.85;">
-                    </a>
-                    <p style="margin-top:18px; max-width:280px; font-size:15px; line-height:1.6; color:#574147;">
-                        Artistry in every touch. Elevating nail care to a fine art.
-                    </p>
-                    <p style="margin-top:16px; font-size:13px; color:#8C7C83;">
-                        &copy; <?php echo date('Y'); ?> Monet Nails. All rights reserved.
-                    </p>
-                </div>
-
-                <div style="flex:1; min-width:160px;">
-                    <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Explore</h4>
-                    <div style="display:flex; flex-direction:column; gap:10px;">
-                        <a href="<?php echo $base_url; ?>/index.php?page=services" style="color:#574147; text-decoration:none; font-size:15px;">Services</a>
-                        <a href="<?php echo $base_url; ?>/index.php?page=booking" style="color:#574147; text-decoration:none; font-size:15px;">Booking</a>
-                        <a href="<?php echo $base_url; ?>/index.php?page=about" style="color:#574147; text-decoration:none; font-size:15px;">About Us</a>
-                        <a href="<?php echo $base_url; ?>/privacy.php" style="color:#574147; text-decoration:none; font-size:15px;">Privacy Policy</a>
-                    </div>
-                </div>
-
-                <div style="flex:1.2; min-width:220px;">
-                    <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Contact</h4>
-                    <div style="display:flex; flex-direction:column; gap:12px; font-size:15px; color:#574147;">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="<?php echo $base_url; ?>/assets/images/home/icon-184.svg" alt="" style="width:14px;">
-                            <span>No 90/1, 4th Lane, Werellawatta, Yakkala</span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="<?php echo $base_url; ?>/assets/images/home/icon-188.svg" alt="" style="width:14px;">
-                            <span>+94 77 210 5954</span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="<?php echo $base_url; ?>/assets/images/home/icon-192.svg" alt="" style="width:14px;">
-                            <span>hello@monetnails.com</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="flex:1; min-width:180px;">
-                    <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Follow Us</h4>
-                    <div style="display:flex; gap:12px;">
-                        <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                            <img src="<?php echo $base_url; ?>/assets/images/home/icon-201.svg" alt="Instagram" style="max-height:16px;">
-                        </a>
-                        <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                            <img src="<?php echo $base_url; ?>/assets/images/home/icon-204.svg" alt="Facebook" style="max-height:16px;">
-                        </a>
-                        <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                            <img src="<?php echo $base_url; ?>/assets/images/home/icon-207.svg" alt="Twitter" style="max-height:16px;">
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <?php require __DIR__ . '/../../includes/footer.php'; ?>
     </div>
-
     <!-- ============================================================
          Client JavaScript: Calendar, Time Slots & Live Summary
          ============================================================ -->

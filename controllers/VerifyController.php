@@ -112,6 +112,15 @@ class VerifyController
                         );
                         $stmt->execute([$pendingId]);
 
+                        // Send "Account Created Successfully" confirmation email
+                        require_once __DIR__ . '/../services/MailService.php';
+                        $customerName = '';
+                        $cust = $this->customerModel->findById((int) $pendingId);
+                        if ($cust) {
+                            $customerName = trim(($cust['f_name'] ?? '') . ' ' . ($cust['l_name'] ?? ''));
+                        }
+                        MailService::sendAccountCreated($pendingEmail, $customerName);
+
                         // Clean up session
                         unset($_SESSION['pending_customer_id']);
                         unset($_SESSION['verify_email']);

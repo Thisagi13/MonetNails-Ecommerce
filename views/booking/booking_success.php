@@ -357,11 +357,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
     </div>
 
     <!-- Footer -->
-    <footer style="background:#F0EDED; border-top:1px solid #E5E7EB; padding:40px 24px; text-align:center;">
-        <p style="font-size:13px; color:#8C7C83;">
-            &copy; <?php echo date('Y'); ?> Monet Nails. All rights reserved.
-        </p>
-    </footer>
+    <?php require __DIR__ . '/../../includes/footer.php'; ?>
 
 </body>
 </html>

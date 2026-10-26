@@ -206,6 +206,31 @@ class BookingController
                                 'total_price'      => $summary['total']
                             ]);
 
+                            // Send "Appointment Placed Successfully" Email
+                            try {
+                                require_once __DIR__ . '/../services/MailService.php';
+                                $aptData = $this->appointmentModel->getById($newId);
+                                if (!$aptData) {
+                                    $aptData = [
+                                        'appointment_id'   => $newId,
+                                        'reference_no'     => '#MN-APT-' . str_pad((string)$newId, 5, '0', STR_PAD_LEFT),
+                                        'first_name'       => $firstName,
+                                        'last_name'        => $lastName,
+                                        'email'            => $email,
+                                        'phone'            => $phone,
+                                        'appointment_date' => $date,
+                                        'appointment_time' => $time,
+                                        'service_name'     => 'Bespoke Nail Art Session',
+                                        'special_requests' => $requests,
+                                        'total_price'      => $summary['total'],
+                                        'status'           => 'Confirmed',
+                                    ];
+                                }
+                                MailService::sendAppointmentBooked($email, $aptData);
+                            } catch (\Throwable $mEx) {
+                                error_log("Failed to send appointment booked email: " . $mEx->getMessage());
+                            }
+
                             // Reset form fields while preserving customer contact details
                             $old['service_id']       = '';
                             $old['addons']           = [];

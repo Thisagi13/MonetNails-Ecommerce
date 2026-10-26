@@ -22,20 +22,62 @@ $isLoggedIn = isset($_SESSION['customer_id']) || isset($_SESSION['user_id']);
 $cid        = (int)($_SESSION['customer_id'] ?? $_SESSION['user_id'] ?? 0);
 $activeNav  = $activeNav ?? ($currentPage ?? ($_GET['page'] ?? 'home'));
 
+// Ensure DB connection is available
+if (!isset($pdo) || !($pdo instanceof PDO)) {
+    if (isset($GLOBALS['pdo']) && ($GLOBALS['pdo'] instanceof PDO)) {
+        $pdo = $GLOBALS['pdo'];
+    } else {
+        $dbPath = __DIR__ . '/../config/db.php';
+        if (file_exists($dbPath)) {
+            require_once $dbPath;
+            if (isset($pdo) && ($pdo instanceof PDO)) {
+                $GLOBALS['pdo'] = $pdo;
+            } elseif (isset($GLOBALS['pdo']) && ($GLOBALS['pdo'] instanceof PDO)) {
+                $pdo = $GLOBALS['pdo'];
+            }
+        }
+    }
+}
+
+// Resolve Cart Item Count for badge across ALL pages
+if (!isset($headerCartCount)) {
+    if (isset($data['itemCount'])) {
+        $headerCartCount = (int)$data['itemCount'];
+    } elseif (isset($itemCount)) {
+        $headerCartCount = (int)$itemCount;
+    } elseif (isset($cartItems) && is_array($cartItems)) {
+        $headerCartCount = count($cartItems);
+    } else {
+        // Fetch live count from DB cart_items table
+        if (isset($pdo) && ($pdo instanceof PDO)) {
+            try {
+                if ($cid > 0) {
+                    $cStmt = $pdo->prepare("SELECT COUNT(*) FROM cart_items WHERE customer_id = ?");
+                    $cStmt->execute([$cid]);
+                    $headerCartCount = (int)$cStmt->fetchColumn();
+                } else {
+                    $sKey = session_id();
+                    if (!empty($sKey)) {
+                        $cStmt = $pdo->prepare("SELECT COUNT(*) FROM cart_items WHERE session_key = ?");
+                        $cStmt->execute([$sKey]);
+                        $headerCartCount = (int)$cStmt->fetchColumn();
+                    } else {
+                        $headerCartCount = 0;
+                    }
+                }
+            } catch (Exception $e) {
+                $headerCartCount = 0;
+            }
+        } else {
+            $headerCartCount = 0;
+        }
+    }
+}
+
 if ($isLoggedIn) {
     // 1. Resolve Customer Data if not already provided by controller
     if (empty($customer_name) || empty($customer_email) || empty($avatar_html)) {
-        if (!isset($pdo) && isset($GLOBALS['pdo'])) {
-            $pdo = $GLOBALS['pdo'];
-        }
-        if (!isset($pdo)) {
-            $dbPath = __DIR__ . '/../config/db.php';
-            if (file_exists($dbPath)) {
-                require_once $dbPath;
-            }
-        }
-
-        if (isset($pdo) && $pdo instanceof PDO && $cid > 0) {
+        if (isset($pdo) && ($pdo instanceof PDO) && $cid > 0) {
             try {
                 $stmt = $pdo->prepare("SELECT customer_id, f_name, l_name, email, profile_image FROM Customer WHERE customer_id = ? LIMIT 1");
                 $stmt->execute([$cid]);
@@ -76,33 +118,6 @@ if ($isLoggedIn) {
         } else {
             $initials = strtoupper(substr($customer_name ?: 'M', 0, 1));
             $avatar_html = '<span class="avatar-initials">' . htmlspecialchars($initials ?: 'M') . '</span>';
-        }
-    }
-
-    // 3. Resolve Cart Item Count for badge
-    if (!isset($headerCartCount)) {
-        if (isset($data['itemCount'])) {
-            $headerCartCount = (int)$data['itemCount'];
-        } elseif (isset($itemCount)) {
-            $headerCartCount = (int)$itemCount;
-        } elseif (isset($cartItems) && is_array($cartItems)) {
-            $headerCartCount = count($cartItems);
-        } else {
-            // Fetch live count from DB
-            if (!isset($pdo) && isset($GLOBALS['pdo'])) {
-                $pdo = $GLOBALS['pdo'];
-            }
-            if (isset($pdo) && $pdo instanceof PDO && $cid > 0) {
-                try {
-                    $cStmt = $pdo->prepare("SELECT COALESCE(SUM(ci.quantity), 0) FROM Cart c JOIN CartItem ci ON c.cart_id = ci.cart_id WHERE c.user_id = ?");
-                    $cStmt->execute([$cid]);
-                    $headerCartCount = (int)$cStmt->fetchColumn();
-                } catch (Exception $e) {
-                    $headerCartCount = 0;
-                }
-            } else {
-                $headerCartCount = 0;
-            }
         }
     }
 

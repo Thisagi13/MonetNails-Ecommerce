@@ -250,6 +250,29 @@ class CheckoutController
                     // Clear Cart
                     $this->cartModel->clearCart((int)$userId, $sessionKey);
 
+                    // Send "Order Placed Successfully" Email
+                    try {
+                        require_once __DIR__ . '/../services/MailService.php';
+                        $orderData = [
+                            'order_id'       => $orderId,
+                            'first_name'     => $ship['first_name'],
+                            'last_name'      => $ship['last_name'],
+                            'email'          => $ship['email'],
+                            'phone'          => $ship['phone'],
+                            'street_address' => $ship['street_address'],
+                            'city'           => $ship['city'],
+                            'postal_code'    => $ship['postal_code'],
+                            'subtotal'       => $subtotal,
+                            'shipping_fee'   => $shippingFee,
+                            'total_amount'   => $total,
+                            'payment_method' => $paymentMethodLabel,
+                            'created_at'     => date('Y-m-d H:i:s'),
+                        ];
+                        MailService::sendOrderPlaced($ship['email'], $orderData, $cart);
+                    } catch (\Throwable $mailEx) {
+                        error_log("Failed to send order placed email: " . $mailEx->getMessage());
+                    }
+
                     // Payment Flow:
                     if ($ship['payment_method'] === 'cod') {
                         // Cash on Delivery -> directly to success

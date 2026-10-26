@@ -255,17 +255,8 @@ if (!function_exists('ohMoney')) {
     <!-- ============================================================
          FOOTER
          ============================================================ -->
-    <footer class="oh-footer">
-        <div class="oh-footer-inner">
-            <div class="oh-footer-brand">
-                <img src="<?php echo $base_url; ?>/assets/images/home/node-210.png" alt="Monet Nails">
-                <span>Monet Nails Atelier</span>
-            </div>
-            <p class="oh-footer-copy">
-                &copy; <?php echo date('Y'); ?> Monet Nails Bar. All rights reserved. Artistry in every touch.
-            </p>
-        </div>
-    </footer>
+    <?php require __DIR__ . '/../../includes/footer.php'; ?>
+
 
 </body>
 </html>

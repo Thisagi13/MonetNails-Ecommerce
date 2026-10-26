@@ -59,16 +59,17 @@ class Cart
     public function getItems(?int $userId, string $sessionKey): array
     {
         if ($userId !== null) {
+            $curSession = session_id();
             $sql = "SELECT c.cart_id, c.quantity, c.shape, c.finish, c.size_preset,
                            c.custom_code, c.extras,
                            p.product_id, p.product_name, p.price,
                            COALESCE(p.image_url, '') AS image_url
                     FROM cart_items c
                     JOIN products p ON p.product_id = c.product_id
-                    WHERE c.customer_id = ?
+                    WHERE (c.customer_id = ? OR (c.customer_id IS NULL AND c.session_key = ?))
                     ORDER BY c.added_at DESC";
             $stmt = $this->db->prepare($sql);
-            $stmt->execute([$userId]);
+            $stmt->execute([$userId, $curSession]);
         } else {
             $sql = "SELECT c.cart_id, c.quantity, c.shape, c.finish, c.size_preset,
                            c.custom_code, c.extras,
@@ -88,9 +89,10 @@ class Cart
     public function removeItem(int $cartId, ?int $userId, string $sessionKey): bool
     {
         if ($userId !== null) {
-            $sql = "DELETE FROM cart_items WHERE cart_id = ? AND customer_id = ?";
+            $curSession = session_id();
+            $sql = "DELETE FROM cart_items WHERE cart_id = ? AND (customer_id = ? OR (customer_id IS NULL AND session_key = ?))";
             $stmt = $this->db->prepare($sql);
-            return $stmt->execute([$cartId, $userId]);
+            return $stmt->execute([$cartId, $userId, $curSession]);
         } else {
             $sql = "DELETE FROM cart_items WHERE cart_id = ? AND session_key = ?";
             $stmt = $this->db->prepare($sql);
@@ -105,9 +107,10 @@ class Cart
             return $this->removeItem($cartId, $userId, $sessionKey);
         }
         if ($userId !== null) {
-            $sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND customer_id = ?";
+            $curSession = session_id();
+            $sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND (customer_id = ? OR (customer_id IS NULL AND session_key = ?))";
             $stmt = $this->db->prepare($sql);
-            return $stmt->execute([$qty, $cartId, $userId]);
+            return $stmt->execute([$qty, $cartId, $userId, $curSession]);
         } else {
             $sql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND session_key = ?";
             $stmt = $this->db->prepare($sql);
