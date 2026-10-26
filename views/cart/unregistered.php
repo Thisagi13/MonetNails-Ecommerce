@@ -79,7 +79,7 @@ require __DIR__ . '/../../includes/header.php';
       <!-- LEFT: Cart Items -->
       <section class="cart-items-col" id="cart-items-col">
         <?php foreach ($data['cartItems'] as $item): ?>
-          <article class="cart-item" id="cart-item-<?php echo (int)$item['cart_id']; ?>" data-cart-id="<?php echo (int)$item['cart_id']; ?>">
+          <article class="cart-item" id="cart-item-<?php echo (int)$item['cart_id']; ?>" data-cart-id="<?php echo (int)$item['cart_id']; ?>" data-price="<?php echo (float)$item['price']; ?>">
             <input type="checkbox" class="cart-item-check" checked
                    aria-label="Select <?php echo htmlspecialchars($item['product_name']); ?>">
 
@@ -117,7 +117,7 @@ require __DIR__ . '/../../includes/header.php';
 
               <!-- Controls -->
               <div class="cart-controls">
-                <div class="qty-stepper" data-cart-id="<?php echo (int)$item['cart_id']; ?>">
+                <div class="qty-stepper" data-cart-id="<?php echo (int)$item['cart_id']; ?>" data-price="<?php echo (float)$item['price']; ?>">
                   <button type="button" class="qty-dec" aria-label="Decrease quantity">
                     <svg width="9" height="2" viewBox="0 0 9 2" fill="none"><path d="M0 1.17V0h8.17v1.17H0Z" fill="#1C1B1B"/></svg>
                   </button>
@@ -128,16 +128,6 @@ require __DIR__ . '/../../includes/header.php';
                 </div>
 
                 <div class="cart-actions-row">
-                  <button type="button" class="cart-action-btn">
-                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1.33 8C.97 8 .65 7.87.39 7.61.13 7.35 0 7.03 0 6.67V1.33C0 .97.13.65.39.39.65.13.97 0 1.33 0H12c.37 0 .68.13.94.39.26.26.39.58.39.94v5.34c0 .36-.13.68-.39.94-.26.26-.57.39-.94.39H1.33Zm0-1.33H12V1.33h-2v2.67H8.67V1.33H7.33v2.67H6V1.33H4.67v2.67H3.33V1.33h-2v5.34Z" fill="#574147"/></svg>
-                    <span>Edit Sizing</span>
-                  </button>
-                  <span class="cart-action-sep">/</span>
-                  <button type="button" class="cart-action-btn">
-                    <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M0 12V1.33C0 .97.13.65.39.39.65.13.97 0 1.33 0H8c.37 0 .68.13.94.39.26.26.39.58.39.94V12L4.67 10 0 12Zm1.33-2.03L4.67 8.53 8 9.97V1.33H1.33v8.64Z" fill="#574147"/></svg>
-                    <span>Save for Later</span>
-                  </button>
-                  <span class="cart-action-sep">/</span>
                   <form method="POST" action="index.php?page=cart" style="display:inline;">
                     <input type="hidden" name="page" value="cart">
                     <input type="hidden" name="action" value="remove">
@@ -163,7 +153,7 @@ require __DIR__ . '/../../includes/header.php';
             <div class="summary-selected-label">Selected Items (<?php echo $data['itemCount']; ?>)</div>
             <div class="summary-item-list">
               <?php foreach ($data['cartItems'] as $it): ?>
-                <div class="summary-item-row">
+                <div class="summary-item-row" data-summary-cart-id="<?php echo (int)$it['cart_id']; ?>" data-price="<?php echo (float)$it['price']; ?>">
                   <span class="s-label"><?php echo htmlspecialchars($it['product_name']); ?></span>
                   <span class="s-val"><?php echo cartMoney((float)$it['price'] * (int)$it['quantity']); ?></span>
                 </div>
@@ -174,18 +164,18 @@ require __DIR__ . '/../../includes/header.php';
           <div class="summary-totals">
             <div class="s-row">
               <span class="s-label">Selected Items Subtotal</span>
-              <span class="s-val"><?php echo cartMoney($data['subtotal']); ?></span>
+              <span class="s-val" id="summary-subtotal"><?php echo cartMoney($data['subtotal']); ?></span>
             </div>
             <div class="s-row">
               <span class="s-label">Shipping Fee</span>
-              <span class="s-val"><?php echo cartMoney($data['shippingFee']); ?></span>
+              <span class="s-val" id="summary-shipping"><?php echo cartMoney($data['shippingFee']); ?></span>
             </div>
           </div>
 
           <div class="summary-grand">
             <div class="s-row">
               <span class="s-label">TOTAL DUE</span>
-              <span class="grand-amount"><?php echo cartMoney($data['totalDue']); ?></span>
+              <span class="grand-amount" id="summary-total"><?php echo cartMoney($data['totalDue']); ?></span>
             </div>
             <div class="summary-note">LKR, VAT &amp; DUTIES INCLUDED</div>
           </div>
@@ -252,21 +242,155 @@ require __DIR__ . '/../../includes/header.php';
 </footer>
 
 <script>
-/* Qty steppers — client-side only; quantity saved via form POST on page change */
-document.querySelectorAll('.qty-stepper').forEach(function(stepper) {
-  var qtyEl  = stepper.querySelector('.qty-val');
-  var cartId = stepper.dataset.cartId;
-  var dec    = stepper.querySelector('.qty-dec');
-  var inc    = stepper.querySelector('.qty-inc');
+/* Qty steppers — dynamic price calculation and persistent DB update */
+(function() {
+  var updateTimers = {};
 
-  dec.addEventListener('click', function() {
-    var q = parseInt(qtyEl.textContent, 10);
-    if (q > 1) qtyEl.textContent = q - 1;
+  function formatMoney(n) {
+    n = Number(n) || 0;
+    if (n % 1 === 0) {
+      return 'Rs.' + n.toLocaleString('en-US');
+    }
+    return 'Rs.' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function recalculateTotals() {
+    var subtotal = 0;
+    var count = 0;
+    document.querySelectorAll('.cart-item').forEach(function(item) {
+      var chk = item.querySelector('.cart-item-check');
+      if (chk && !chk.checked) return;
+      var price = parseFloat(item.getAttribute('data-price')) || 0;
+      var qtyEl = item.querySelector('.qty-val');
+      var qty = qtyEl ? (parseInt(qtyEl.textContent, 10) || 1) : 1;
+      subtotal += price * qty;
+      count++;
+    });
+
+    var shipping = subtotal > 0 ? 150 : 0;
+    var totalDue = subtotal + shipping;
+
+    var countLabel = document.querySelector('.summary-selected-label');
+    if (countLabel) countLabel.textContent = 'Selected Items (' + count + ')';
+
+    var subtotalEl = document.getElementById('summary-subtotal');
+    if (subtotalEl) subtotalEl.textContent = formatMoney(subtotal);
+
+    var shippingEl = document.getElementById('summary-shipping');
+    if (shippingEl) shippingEl.textContent = formatMoney(shipping);
+
+    var totalEl = document.getElementById('summary-total');
+    if (totalEl) totalEl.textContent = formatMoney(totalDue);
+  }
+
+  function updateQuantity(stepper, delta) {
+    var qtyEl = stepper.querySelector('.qty-val');
+    var cartId = stepper.getAttribute('data-cart-id');
+    var currentQty = parseInt(qtyEl.textContent, 10) || 1;
+    var newQty = currentQty + delta;
+    if (newQty < 1) return;
+
+    // 1. Immediately update quantity display
+    qtyEl.textContent = newQty;
+
+    // 2. Immediately update item price on the card
+    var article = stepper.closest('.cart-item');
+    var unitPrice = parseFloat((article && article.getAttribute('data-price')) || stepper.getAttribute('data-price') || 0);
+    var itemTotal = unitPrice * newQty;
+
+    if (article) {
+      var priceEl = article.querySelector('.cart-item-price');
+      if (priceEl) priceEl.textContent = formatMoney(itemTotal);
+    }
+
+    // 3. Immediately update order summary line for this item
+    var summaryRow = document.querySelector('.summary-item-row[data-summary-cart-id="' + cartId + '"]');
+    if (summaryRow) {
+      var summaryVal = summaryRow.querySelector('.s-val');
+      if (summaryVal) summaryVal.textContent = formatMoney(itemTotal);
+    }
+
+    // 4. Immediately recalculate subtotal & total due
+    recalculateTotals();
+
+    // 5. Debounce the AJAX call to persist to server / database
+    if (updateTimers[cartId]) {
+      clearTimeout(updateTimers[cartId]);
+    }
+
+    updateTimers[cartId] = setTimeout(function() {
+      var body = new URLSearchParams();
+      body.append('action', 'update_qty');
+      body.append('cart_id', cartId);
+      body.append('quantity', newQty);
+      body.append('ajax', '1');
+
+      fetch('index.php?page=cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: body.toString()
+      })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(resData) {
+        if (resData && resData.success) {
+          if (article) {
+            var pEl = article.querySelector('.cart-item-price');
+            if (pEl && resData.item_total_formatted) pEl.textContent = resData.item_total_formatted;
+          }
+          if (summaryRow) {
+            var sVal = summaryRow.querySelector('.s-val');
+            if (sVal && resData.item_total_formatted) sVal.textContent = resData.item_total_formatted;
+          }
+          var subEl = document.getElementById('summary-subtotal');
+          if (subEl && resData.subtotal_formatted) subEl.textContent = resData.subtotal_formatted;
+
+          var totEl = document.getElementById('summary-total');
+          if (totEl && resData.total_due_formatted) totEl.textContent = resData.total_due_formatted;
+        }
+      })
+      .catch(function(err) {
+        console.error('Error persisting cart quantity:', err);
+      });
+    }, 200);
+  }
+
+  document.querySelectorAll('.qty-stepper').forEach(function(stepper) {
+    var dec = stepper.querySelector('.qty-dec');
+    var inc = stepper.querySelector('.qty-inc');
+
+    if (dec) {
+      dec.addEventListener('click', function(e) {
+        e.preventDefault();
+        updateQuantity(stepper, -1);
+      });
+    }
+
+    if (inc) {
+      inc.addEventListener('click', function(e) {
+        e.preventDefault();
+        updateQuantity(stepper, 1);
+      });
+    }
   });
-  inc.addEventListener('click', function() {
-    qtyEl.textContent = parseInt(qtyEl.textContent, 10) + 1;
+
+  // Checkbox toggle recalculation
+  document.querySelectorAll('.cart-item-check').forEach(function(chk) {
+    chk.addEventListener('change', function() {
+      var article = chk.closest('.cart-item');
+      var cartId = article ? article.getAttribute('data-cart-id') : null;
+      var summaryRow = cartId ? document.querySelector('.summary-item-row[data-summary-cart-id="' + cartId + '"]') : null;
+      if (summaryRow) {
+        summaryRow.style.display = chk.checked ? '' : 'none';
+      }
+      recalculateTotals();
+    });
   });
-});
+})();
 </script>
 </body>
 </html>

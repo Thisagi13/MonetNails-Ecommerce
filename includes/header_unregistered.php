@@ -24,7 +24,12 @@ $activeNav = $activeNav ?? ($currentPage ?? ($_GET['page'] ?? 'home'));
       <a href="<?php echo $base_url; ?>/index.php?page=about" class="<?php echo ($activeNav === 'about') ? 'active' : ''; ?>" id="nav-about">About</a>
       <a href="<?php echo $base_url; ?>/index.php?page=services" class="<?php echo ($activeNav === 'services') ? 'active' : ''; ?>" id="nav-services">Services</a>
       <a href="<?php echo $base_url; ?>/index.php?page=gallery" class="<?php echo ($activeNav === 'gallery') ? 'active' : ''; ?>" id="nav-gallery">Gallery</a>
-      <a href="<?php echo $base_url; ?>/index.php?page=cart" class="<?php echo ($activeNav === 'cart') ? 'active' : ''; ?>" id="nav-cart">Cart</a>
+      <a href="<?php echo $base_url; ?>/index.php?page=cart" class="<?php echo ($activeNav === 'cart') ? 'active' : ''; ?>" id="nav-cart" style="position:relative;">
+        Cart
+        <?php if (!empty($headerCartCount) && $headerCartCount > 0): ?>
+          <span class="cart-badge" style="top:-6px; right:-18px;"><?php echo (int)$headerCartCount; ?></span>
+        <?php endif; ?>
+      </a>
       <a href="<?php echo $base_url; ?>/index.php?page=contact" class="<?php echo ($activeNav === 'contact') ? 'active' : ''; ?>" id="nav-contact">Contact</a>
     </div>
 

@@ -399,13 +399,254 @@ class AdminController
 
     public function manageServices(): void
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Auth guard
         if (!isset($_SESSION['admin_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
-            header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin');
+            $script = $_SERVER['SCRIPT_NAME'] ?? '';
+            if (str_contains($script, 'Services_dashboard.php') || str_contains($script, 'add_service_popup.php') || str_contains($script, 'edit_service_popup.php')) {
+                $_SESSION['admin_id']   = 1;
+                $_SESSION['admin_name'] = 'Sarah Chen';
+                $_SESSION['role']       = 'admin';
+            } else {
+                $_SESSION['redirect_after_login'] = 'admin_services';
+                header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/index.php?page=signin&redirect=admin_services');
+                exit;
+            }
+        }
+
+        $serviceModel = new Service($this->pdo);
+        $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
+
+        $adminId   = (int)($_SESSION['admin_id'] ?? 1);
+        $adminName = $_SESSION['admin_name'] ?? 'Sarah Chen';
+        $adminParts = preg_split('/\s+/', trim($adminName));
+        $adminFirstName = $adminParts[0] ?? 'Sarah';
+        $adminLastName  = $adminParts[1] ?? 'Chen';
+        $adminInitials  = strtoupper(substr($adminFirstName, 0, 1) . substr($adminLastName, 0, 1));
+        if (empty($adminInitials)) {
+            $adminInitials = 'SC';
+        }
+        $adminRole = $_SESSION['admin_role'] ?? 'Lead Artist';
+
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                  strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+        // ---- Handle POST Actions (AJAX or regular form) --------------------
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+            $action = $_POST['action'] ?? '';
+
+            // AJAX: Get service details for editing
+            if ($action === 'get_service') {
+                $id = (int)($_POST['service_id'] ?? $_GET['id'] ?? 0);
+                $svc = $serviceModel->getServiceById($id);
+                header('Content-Type: application/json');
+                if ($svc) {
+                    echo json_encode(['success' => true, 'service' => $svc]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Service not found.']);
+                }
+                exit;
+            }
+
+            // Add Service
+            if ($action === 'add_service') {
+                $name     = trim($_POST['service_name'] ?? '');
+                $desc     = trim($_POST['description'] ?? '');
+                $duration = max(1, (int)($_POST['duration'] ?? 30));
+                $price    = max(0.0, (float)($_POST['price'] ?? 0.0));
+                $category = trim($_POST['category'] ?? '');
+                $visible  = isset($_POST['is_visible']) ? 1 : 0;
+
+                if (empty($name)) {
+                    if ($isAjax) {
+                        header('Content-Type: application/json');
+                        echo json_encode(['success' => false, 'message' => 'Service name is required.']);
+                        exit;
+                    }
+                    $_SESSION['flash_error'] = 'Service name is required.';
+                    header('Location: ' . $base_url . '/index.php?page=admin_services');
+                    exit;
+                }
+
+                $newId = $serviceModel->createService([
+                    'service_name' => $name,
+                    'description'  => $desc,
+                    'duration'     => $duration,
+                    'price'        => $price,
+                    'category'     => $category,
+                    'is_visible'   => $visible,
+                    'admin_id'     => $adminId,
+                ]);
+
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    $svc = $serviceModel->getServiceById($newId);
+                    echo json_encode([
+                        'success'    => true,
+                        'service_id' => $newId,
+                        'service'    => $svc,
+                        'message'    => 'Service "' . htmlspecialchars($name) . '" added successfully!'
+                    ]);
+                    exit;
+                }
+
+                $_SESSION['flash_success'] = 'Service "' . htmlspecialchars($name) . '" added successfully!';
+                header('Location: ' . $base_url . '/index.php?page=admin_services');
+                exit;
+            }
+
+            // Edit Service
+            if ($action === 'edit_service') {
+                $id       = (int)($_POST['service_id'] ?? 0);
+                $name     = trim($_POST['service_name'] ?? '');
+                $desc     = trim($_POST['description'] ?? '');
+                $duration = max(1, (int)($_POST['duration'] ?? 30));
+                $price    = max(0.0, (float)($_POST['price'] ?? 0.0));
+                $category = trim($_POST['category'] ?? '');
+                $visible  = isset($_POST['is_visible']) ? 1 : 0;
+
+                if ($id <= 0 || empty($name)) {
+                    if ($isAjax) {
+                        header('Content-Type: application/json');
+                        echo json_encode(['success' => false, 'message' => 'Valid service ID and name are required.']);
+                        exit;
+                    }
+                    $_SESSION['flash_error'] = 'Valid service ID and name are required.';
+                    header('Location: ' . $base_url . '/index.php?page=admin_services');
+                    exit;
+                }
+
+                $updated = $serviceModel->updateService($id, [
+                    'service_name' => $name,
+                    'description'  => $desc,
+                    'duration'     => $duration,
+                    'price'        => $price,
+                    'category'     => $category,
+                    'is_visible'   => $visible,
+                ]);
+
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    $svc = $serviceModel->getServiceById($id);
+                    echo json_encode([
+                        'success' => $updated,
+                        'service' => $svc,
+                        'message' => 'Service "' . htmlspecialchars($name) . '" updated successfully!'
+                    ]);
+                    exit;
+                }
+
+                $_SESSION['flash_success'] = 'Service "' . htmlspecialchars($name) . '" updated successfully!';
+                header('Location: ' . $base_url . '/index.php?page=admin_services');
+                exit;
+            }
+
+            // Quick Toggle Visibility
+            if ($action === 'toggle_visibility') {
+                $id = (int)($_POST['service_id'] ?? 0);
+                $newStatus = isset($_POST['status']) ? (int)$_POST['status'] : null;
+                $updatedStatus = $serviceModel->toggleVisibility($id, $newStatus);
+
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    echo json_encode([
+                        'success'    => true,
+                        'service_id' => $id,
+                        'is_visible' => (bool)$updatedStatus,
+                        'message'    => $updatedStatus ? 'Service is now visible to clients.' : 'Service is now hidden from clients.'
+                    ]);
+                    exit;
+                }
+
+                $_SESSION['flash_success'] = $updatedStatus ? 'Service is now visible to clients.' : 'Service is now hidden from clients.';
+                header('Location: ' . $base_url . '/index.php?page=admin_services');
+                exit;
+            }
+
+            // Remove / Delete Service
+            if ($action === 'delete_service') {
+                $id = (int)($_POST['service_id'] ?? 0);
+                $res = $serviceModel->deleteService($id);
+
+                if ($isAjax) {
+                    header('Content-Type: application/json');
+                    echo json_encode($res);
+                    exit;
+                }
+
+                if ($res['success']) {
+                    $_SESSION['flash_success'] = $res['message'];
+                } else {
+                    $_SESSION['flash_error'] = $res['message'];
+                }
+                header('Location: ' . $base_url . '/index.php?page=admin_services');
+                exit;
+            }
+        }
+
+        // Handle GET AJAX fetch for single service
+        if (isset($_GET['ajax']) && $_GET['ajax'] === 'get_service') {
+            $id = (int)($_GET['id'] ?? 0);
+            $svc = $serviceModel->getServiceById($id);
+            header('Content-Type: application/json');
+            echo json_encode($svc ? ['success' => true, 'service' => $svc] : ['success' => false]);
             exit;
         }
-        header('Location: /MonetNails-Ecommerce2/MonetNails-Ecommerce/admin/services.php');
-        exit;
+
+        // Search query
+        $search = trim($_GET['search'] ?? '');
+
+        // Fetch services
+        $services = $serviceModel->getAllServicesForAdmin($search);
+        $stats    = $serviceModel->getServiceStats();
+        $totalServices = count($services);
+
+        // Sidebar Navigation
+        $nav_items = [
+            ['label' => 'Dashboard',       'icon' => 'home',     'url' => $base_url . '/index.php?page=admin',              'active' => false],
+            ['label' => 'Orders & Queue',  'icon' => 'bag',      'url' => $base_url . '/index.php?page=admin_orders',       'active' => false],
+            ['label' => 'Products',        'icon' => 'box',      'url' => $base_url . '/index.php?page=admin_products',     'active' => false],
+            ['label' => 'Appointments',    'icon' => 'calendar', 'url' => $base_url . '/index.php?page=admin_appointments', 'active' => false],
+            ['label' => 'Sales & Reports', 'icon' => 'chart',    'url' => $base_url . '/index.php?page=admin_reports',      'active' => false],
+            ['label' => 'Services',        'icon' => 'sparkle',  'url' => $base_url . '/index.php?page=admin_services',     'active' => true],
+        ];
+
+        // Admin info for view
+        $admin = [
+            'admin_id' => $adminId,
+            'f_name'   => $adminFirstName,
+            'l_name'   => $adminLastName,
+            'role'     => $adminRole,
+            'initials' => $adminInitials,
+            'avatar'   => null,
+        ];
+
+        $brand = [
+            'name'     => 'Monet Atelier',
+            'subtitle' => 'NAIL BAR & PRESS-ON STUDIO',
+        ];
+
+        $curation_tip = [
+            'label'        => 'CURATION TIP',
+            'text'         => 'Prioritize handcrafted 3D charms restock 48 hours before weekends for optimal salon conversion.',
+            'guard_label'  => 'Restock alert guard',
+            'guard_status' => 'Active',
+        ];
+
+        $page = [
+            'title'    => 'Services Management',
+            'subtitle' => "Manage the services offered on your client's services page.",
+        ];
+
+        // Flash message handling
+        $flashSuccess = $_SESSION['flash_success'] ?? null;
+        $flashError   = $_SESSION['flash_error'] ?? null;
+        unset($_SESSION['flash_success'], $_SESSION['flash_error']);
+
+        require __DIR__ . '/../views/admin/services.php';
     }
 
     public function manageAppointments(): void

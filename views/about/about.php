@@ -90,7 +90,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
 
             <!-- Founder portrait -->
             <div class="founder-img-wrap">
-                <img src="<?php echo $base_url; ?>/assets/images/home/image-54.png"
+                <img src="<?php echo $base_url; ?>/leha.jpeg"
                      alt="m.L.L.Methnara — Founder of Monet Nails">
             </div>
 
@@ -247,21 +247,15 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
 
             <div class="footer-col">
                 <h4>Follow Us</h4>
-                <div class="social-icons">
-                    <a href="#" aria-label="Instagram" id="linkAboutInstagram">
-                        <svg viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8.33333 12.0833C9.375 12.0833 10.2604 11.7188 10.9896 10.9896C11.7188 10.2604 12.0833 9.375 12.0833 8.33333C12.0833 7.29167 11.7188 6.40625 10.9896 5.67708C10.2604 4.94792 9.375 4.58333 8.33333 4.58333C7.29167 4.58333 6.40625 4.94792 5.67708 5.67708C4.94792 6.40625 4.58333 7.29167 4.58333 8.33333C4.58333 9.375 4.94792 10.2604 5.67708 10.9896C6.40625 11.7188 7.29167 12.0833 8.33333 12.0833ZM1.66667 15C1.20833 15 0.815972 14.8368 0.489583 14.5104C0.163194 14.184 0 13.7917 0 13.3333V3.33333C0 2.875 0.163194 2.48264 0.489583 2.15625C0.815972 1.82986 1.20833 1.66667 1.66667 1.66667H4.29167L5.83333 0H10.8333L12.375 1.66667H15C15.4583 1.66667 15.8507 1.82986 16.1771 2.15625C16.5035 2.48264 16.6667 2.875 16.6667 3.33333V13.3333C16.6667 13.7917 16.5035 14.184 16.1771 14.5104C15.8507 14.8368 15.4583 15 15 15H1.66667Z" fill="currentColor"/>
-                        </svg>
+                <div class="social-row" style="display:flex; gap:16px;">
+                    <a href="#" aria-label="TikTok" id="linkAboutTikTok" style="display:flex; justify-content:center; align-items:center; width:44px; height:44px; border:1px solid rgba(221,191,198,0.5); border-radius:12px; text-decoration:none;">
+                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-152.svg" alt="TikTok" style="width:22px; height:22px;">
                     </a>
-                    <a href="#" aria-label="Facebook" id="linkAboutFacebook">
-                        <svg viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.33333 15C2.41667 15 1.63194 14.6736 0.979167 14.0208C0.326389 13.3681 0 12.5833 0 11.6667C0 10.75 0.326389 9.96528 0.979167 9.3125C1.63194 8.65972 2.41667 8.33333 3.33333 8.33333C3.65278 8.33333 3.94792 8.37153 4.21875 8.44792C4.48958 8.52431 4.75 8.63889 5 8.79167V0H10V3.33333H6.66667V11.6667C6.66667 12.5833 6.34028 13.3681 5.6875 14.0208C5.03472 14.6736 4.25 15 3.33333 15Z" fill="currentColor"/>
-                        </svg>
+                    <a href="#" aria-label="Instagram" id="linkAboutInstagram" style="display:flex; justify-content:center; align-items:center; width:44px; height:44px; border:1px solid rgba(221,191,198,0.5); border-radius:12px; text-decoration:none;">
+                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-155.svg" alt="Instagram" style="width:22px; height:22px;">
                     </a>
-                    <a href="#" aria-label="Pinterest" id="linkAboutPinterest">
-                        <svg viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13.3333 16.6667H4.16667V5.83333L10 0L11.0417 1.04167C11.1389 1.13889 11.2188 1.27083 11.2812 1.4375C11.3438 1.60417 11.375 1.76389 11.375 1.91667V2.20833L10.4583 5.83333H15.8333C16.2778 5.83333 16.6667 6 17 6.33333C17.3333 6.66667 17.5 7.05556 17.5 7.5V9.16667C17.5 9.26389 17.4861 9.36806 17.4583 9.47917C17.4306 9.59028 17.4028 9.69444 17.375 9.79167L14.875 15.6667C14.75 15.9444 14.5417 16.1806 14.25 16.375C13.9583 16.5694 13.6528 16.6667 13.3333 16.6667Z" fill="currentColor"/>
-                        </svg>
+                    <a href="#" aria-label="Facebook" id="linkAboutFacebook" style="display:flex; justify-content:center; align-items:center; width:44px; height:44px; border:1px solid rgba(221,191,198,0.5); border-radius:12px; text-decoration:none;">
+                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-158.svg" alt="Facebook" style="width:22px; height:22px;">
                     </a>
                 </div>
             </div>

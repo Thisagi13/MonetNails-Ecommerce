@@ -177,7 +177,7 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                                 <?php endif; ?>
                                 <p><?php echo htmlspecialchars($item['description'] ?? ''); ?></p>
                             </div>
-                            <a href="<?php echo $base_url; ?>/contact.php" class="srv-inquire-link">
+                            <a href="<?php echo $base_url; ?>/index.php?page=contact" class="srv-inquire-link">
                                 Inquire for pricing
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -264,13 +264,13 @@ $base_url = '/MonetNails-Ecommerce2/MonetNails-Ecommerce';
                 <h4 style="font-family:'Bodoni Moda', serif; font-size:22px; color:#1C1B1B; margin:0 0 16px;">Follow Us</h4>
                 <div style="display:flex; gap:12px;">
                     <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/icon-201.svg" alt="Instagram" style="max-height:16px;">
+                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-152.svg" alt="TikTok" style="max-height:16px;">
                     </a>
                     <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/icon-204.svg" alt="Facebook" style="max-height:16px;">
+                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-155.svg" alt="Instagram" style="max-height:16px;">
                     </a>
                     <a href="#" style="width:40px; height:40px; border:1px solid rgba(221,191,198,0.7); border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
-                        <img src="<?php echo $base_url; ?>/assets/images/home/icon-207.svg" alt="Twitter" style="max-height:16px;">
+                        <img src="<?php echo $base_url; ?>/assets/images/gallery/icon-158.svg" alt="Facebook" style="max-height:16px;">
                     </a>
                 </div>
             </div>
