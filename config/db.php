@@ -4,7 +4,7 @@
 $host = 'localhost';
 $db   = 'monet_nails_db';
 $user = 'root';
-$pass = '';
+$pass = '220308';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -16,6 +16,10 @@ $options = [
 
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
+     $GLOBALS['pdo'] = $pdo;
+     // Sync MySQL session timezone to PHP's timezone so expires_at comparisons work correctly
+     $offset = (new DateTime())->format('P'); // e.g. "+02:00"
+     $pdo->exec("SET time_zone = '$offset'");
 } catch (\PDOException $e) {
      throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }

@@ -1,0 +1,223 @@
+/* =============================================================
+   auth.css — Monet Nails Bar  |  Sign In & Sign Up pages
+   Extracted from flat SignIn.php / SignUp.php into MVC structure.
+   ============================================================= */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --c-black:       rgba(28, 27, 27, 1);
+  --c-muted:       rgba(87, 65, 71, 1);
+  --c-placeholder: rgba(138, 113, 119, 1);
+  --c-pink:        rgba(169, 39, 94, 1);
+  --c-gray:        rgba(112, 96, 101, 1);
+  --c-white:       rgba(255, 255, 255, 1);
+  --c-bg-soft:     rgba(252, 249, 248, 0.8);
+  --c-footer-bg:   rgba(240, 237, 237, 1);
+  --c-border:      rgba(221, 191, 198, 0.3);
+
+  --font-head: 'Bodoni Moda', serif;
+  --font-body: 'Manrope', sans-serif;
+}
+
+/* ---------- Reset ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-body);
+  background: var(--c-white);
+  color: var(--c-black);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* ---------- Page shell ---------- */
+.page {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--c-white);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ---------- Decorative brand-line illustrations (top corners, faint) ---------- */
+.brand-art { position: absolute; top: 0; opacity: 0.1; pointer-events: none; z-index: 0; }
+.brand-art.left  { left: 0; }
+.brand-art.right { right: 0; }
+.brand-art img { mix-blend-mode: multiply; width: 320px; }
+
+/* ---------- Top nav bar (sticky) ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: var(--c-bg-soft);
+  border-bottom: 1px solid var(--c-border);
+  padding: 16px 40px;
+}
+.topbar-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.brand {
+  font-family: var(--font-head);
+  font-size: 28px;
+  letter-spacing: -1.4px;
+  color: var(--c-pink);
+}
+.topbar-back {
+  font-size: 14px;
+  letter-spacing: 0.7px;
+  color: var(--c-muted);
+  transition: color .15s;
+}
+.topbar-back:hover { color: var(--c-pink); }
+
+/* ---------- Main content area ---------- */
+.main-wrap {
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.main {
+  width: 100%;
+  max-width: 448px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ---------- Heading ---------- */
+.heading-title {
+  font-family: var(--font-head);
+  font-size: 40px;
+  line-height: 48px;
+  color: var(--c-black);
+  text-align: center;
+}
+.heading-sub {
+  font-size: 16px;
+  line-height: 25.6px;
+  color: var(--c-muted);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ---------- Role toggle (Customer / Admin) — SignIn only ---------- */
+.role-toggle {
+  display: flex; gap: 8px; justify-content: center; margin-bottom: 8px;
+}
+.role-toggle button {
+  font-family: var(--font-body);
+  font-size: 13px; letter-spacing: 0.7px;
+  padding: 8px 20px;
+  border: 1px solid var(--c-placeholder);
+  background: transparent; color: var(--c-muted);
+  cursor: pointer; transition: all 0.15s ease;
+}
+.role-toggle button.active {
+  background: var(--c-black); color: var(--c-white); border-color: var(--c-black);
+}
+
+/* ---------- Form ---------- */
+form { display: flex; flex-direction: column; gap: 24px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-label { font-size: 14px; letter-spacing: 0.7px; color: var(--c-black); }
+.field-row { display: flex; justify-content: space-between; align-items: center; }
+.link-pink {
+  font-size: 14px; letter-spacing: 0.7px; color: var(--c-pink);
+}
+.link-pink.block { border-bottom: 1px solid var(--c-pink); padding-bottom: 1px; }
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+  font-family: var(--font-body);
+  font-size: 16px; color: var(--c-black);
+  padding: 13px 0 14px 0;
+  border: none;
+  border-bottom: 1px solid var(--c-placeholder);
+  background: transparent; outline: none; width: 100%;
+  transition: border-color .15s;
+}
+input::placeholder { color: var(--c-placeholder); }
+input:focus { border-bottom-color: var(--c-pink); }
+
+/* ---------- Terms note (SignUp only) ---------- */
+.terms {
+  font-size: 14px; line-height: 22px; color: var(--c-muted);
+  text-align: center; margin-top: 4px;
+}
+.terms a { color: var(--c-pink); border-bottom: 1px solid var(--c-pink); }
+
+/* ---------- Submit button ---------- */
+.btn-submit {
+  font-family: var(--font-body);
+  font-size: 14px; letter-spacing: 1.4px;
+  color: var(--c-white); background: var(--c-black);
+  border: 1px solid var(--c-black);
+  padding: 16px 24px; cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn-submit:hover { background: var(--c-pink); border-color: var(--c-pink); }
+
+/* ---------- Below-form link ---------- */
+.below-form {
+  text-align: center; font-size: 16px;
+  color: var(--c-muted); line-height: 25.6px;
+}
+.below-form a {
+  color: var(--c-pink); font-size: 14px; letter-spacing: 0.7px;
+  border-bottom: 1px solid var(--c-pink);
+  padding-bottom: 1px; margin-left: 4px;
+}
+
+/* ---------- Error list ---------- */
+.errors {
+  background: rgba(169, 39, 94, 0.08);
+  border: 1px solid rgba(169, 39, 94, 0.3);
+  padding: 12px 14px; list-style: none;
+  font-size: 13px; color: var(--c-pink);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.errors li::before { content: "• "; }
+
+/* ---------- Footer ---------- */
+.footer {
+  background: var(--c-footer-bg);
+  border-top: 1px solid var(--c-border);
+  padding: 48px 40px;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.footer-brand { font-family: var(--font-head); font-size: 28px; color: var(--c-black); }
+.footer-nav { display: flex; gap: 24px; }
+.footer-nav a { font-size: 16px; color: var(--c-gray); transition: color .15s; }
+.footer-nav a:hover { color: var(--c-pink); }
+.footer-copy {
+  max-width: 1200px; margin: 24px auto 0 auto;
+  font-size: 14px; color: var(--c-muted);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .topbar { padding: 12px 16px; }
+  .footer { padding: 32px 16px; }
+  .main-wrap { padding: 48px 0; }
+  .heading-title { font-size: 32px; line-height: 40px; }
+  .brand-art img { width: 200px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
